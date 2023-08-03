@@ -1,0 +1,24 @@
+{
+  "scripts": {
+    "test": "SET NODE_ENV=test&& nodemon app.js",
+    "start": "SET NODE_ENV=local&& nodemon app.js"
+  },
+  "localRoot": "$../app",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "custom-env": "^2.0.2",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "mongoose": "^7.4.1",
+    "nodemon": "^3.0.1"
+  },
+  "name": "application-dev",
+  "version": "1.0.0",
+  "main": "app.js",
+  "devDependencies": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
