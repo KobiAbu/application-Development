@@ -7,7 +7,7 @@
 </head>
 <body>
   <h1>Add Item</h1>
-  <form id="addItemForm">
+  <form method ="post" id="addItemForm" action="/admin/addAnItem">
     <div>
       <label for="id">ID:</label>
       <input type="text" id="id" name="id" required>
@@ -28,5 +28,26 @@
       <input type="submit" value="Add Item">
     </div>
   </form>
+  <script src ="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+  <script>
+    
+    $(function()
+    {
+  
+      $(document.forms[0]).submit(function(e){e.preventDefault})
+      $.ajax({
+        
+        type:"POST",
+        data:$(document.forms[0]).serialize(),
+        success: function(data)
+        {
+            prompt("hey")
+        }
+
+      }).done(function()
+      {
+      })
+    })
+  </script>
 </body>
 </html>

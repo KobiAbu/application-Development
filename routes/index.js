@@ -16,6 +16,12 @@ get((req,res)=>{res.sendFile(appDir+'/forms/registar.html')})
 router.route('/admin/add').
 get((req,res)=>{res.sendFile(appDir+'/forms/add.html')})
 
+router.route('/admin/addAnItem').
+post((req,res)=>{
+    dataController.createItem(req)
+    
+})
+
 router.route('/admin/update').
 get((req,res)=>{res.sendFile(appDir+'/forms/update.html')})
 

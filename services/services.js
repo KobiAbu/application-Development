@@ -22,24 +22,25 @@ const getUser =async(name,password)=>
       }
 }
 
-const crateItem = async (adminId, id, productName, price, stock) => {
+const crateItem = async (id, productName, price, stock) => {
     try {
       // Assuming you have an `Admin` model to query admins by `adminId`
-      const admin = await admins.findById(adminId);
+    //  const admin = await admins.findById(adminId);
   
-      if (admin) {
+      //if (admin) {
         const item = new items({
           id: id,
           productName: productName,
           price: price,
           stock: stock,
-        });
+        }
+        );
   
          await item.save();
         return id;
-      } else {
-        return null;
-      }
+      //} else {
+        //return null;
+      //}
     } catch (error) {
 
       return null;
