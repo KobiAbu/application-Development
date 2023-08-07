@@ -18,6 +18,20 @@ const adminScheme=new schema(
         type:String
     }
 })
+const userScheme=new schema(
+    {
+        userName:
+        {
+        type:String,
+        required:true
+        },
+
+        password:
+        {
+            type:String,
+            required:true
+        }
+    })
 
 const data =new schema({
     id:{ 
@@ -39,6 +53,7 @@ const data =new schema({
 
 })
 //const itemCol=mongoose.model("items",data)
-const index=mongoose.model("items",data)
+const items=mongoose.model("items",data)
 const admins= mongoose.model("admins",adminScheme)
-module.exports={index,admins}
+const users=mongoose.model("users",userScheme)
+module.exports={items,admins,users}

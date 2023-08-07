@@ -1,0 +1,39 @@
+body {
+    background-color: #f5f5f5;
+    font-family: sans-serif;
+  }
+  
+  .registrationForm {
+    width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+  }
+  
+  .input-group {
+    margin-bottom: 10px;
+  }
+  
+  .input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    outline: none;
+  }
+  
+  .btn {
+    background-color: #008cba;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .btn:hover {
+    background-color: #0073aa;
+  }
+  
+  .text-center {
+    text-align: center;
+  }
+  
