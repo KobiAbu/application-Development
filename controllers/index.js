@@ -34,15 +34,14 @@ const createItem=async(req,res)=>
 {
     //implement premissions check
 
-
     const newItem=await dataService.crateItem(req.body.id,req.body.productName,req.body.price,req.body.stock)
+
+    //generate responses
     if(newItem){
-        //fix response
-    //res.json({"data":"item has created"})
-    //return null
+  
 }
 else
-res.json("you dont have premission to create object")
+return("you dont have premission to create object")
 }
 
 const getItemById=async(req,res)=>

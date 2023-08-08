@@ -36,8 +36,8 @@ const crateItem = async (id, productName, price, stock) => {
         }
         );
   
-         await item.save();
-        return id;
+        return await item.save();
+        
       //} else {
         //return null;
       //}

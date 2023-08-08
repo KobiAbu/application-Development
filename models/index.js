@@ -40,15 +40,18 @@ const data =new schema({
     },
     productName:
     {
-        type:String
+        type:String,
+        required:true
     },
     price:
     {
-        type:Number
+        type:Number,
+        required:true
     },
     stock:
     {
-        type:Number
+        type:Number,
+        required:true
     }
 
 })

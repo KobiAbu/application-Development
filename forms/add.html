@@ -7,7 +7,7 @@
 </head>
 <body>
   <h1>Add Item</h1>
-  <form method ="post" id="addItemForm" action="/admin/addAnItem">
+  <form method ="post" action="/admin/addAnItem/">
     <div>
       <label for="id">ID:</label>
       <input type="text" id="id" name="id" required>
@@ -33,21 +33,17 @@
     
     $(function()
     {
-  
-      $(document.forms[0]).submit(function(e){e.preventDefault})
+      $(document.forms[0]).submit(function(e){
+                e.preventDefault();
       $.ajax({
-        
         type:"POST",
+        url:"/admin/addAnItem/",
         data:$(document.forms[0]).serialize(),
-        success: function(data)
-        {
-            prompt("hey")
-        }
-
-      }).done(function()
-      {
-      })
-    })
+         success: function(data)
+         {
+          document.getElementById("id").innerHTML=""
+         }
+      })})})  
   </script>
 </body>
 </html>

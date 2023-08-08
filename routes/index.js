@@ -2,6 +2,7 @@ const express=require('express')
 const router=express.Router()
 const dataController=require('../controllers/index')
 const { dirname } = require('path');
+const { json } = require('body-parser');
 const appDir = dirname(require.main.filename)
 
 
@@ -19,7 +20,6 @@ get((req,res)=>{res.sendFile(appDir+'/forms/add.html')})
 router.route('/admin/addAnItem').
 post((req,res)=>{
     dataController.createItem(req)
-    
 })
 
 router.route('/admin/update').
