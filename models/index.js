@@ -1,23 +1,22 @@
 const mongoose= require('mongoose')
 const schema=mongoose.Schema
-//enter schema
-const adminScheme=new schema(
-{
-    id:
+
+const supplierScheme=new schema(
+    
     {
+        supplierName:{
         type:String,
         required:true
-    },
-    password:
-    {
-        type:String,
-        required:true
-    },
-    name:
-    {
-        type:String
+        },
+        phoneNumber:{
+            type:String,
+            required:true
+        },
+        email:{
+            type:String,
+        },
     }
-})
+)
 const userScheme=new schema(
     {
         userName:
@@ -30,11 +29,26 @@ const userScheme=new schema(
         {
             type:String,
             required:true
-        }
+        },
+       admin:{
+              type:Boolean,
+              default:false
+       },
+       purchasesHistory:{
+              type:Array,
+             default:[]
+       }
+       ,adress:
+       {
+        type:String,
+        required:true
+       }
+
+    
     })
 
 const data =new schema({
-    id:{ 
+    itemId:{ 
     type:String,
     required:true
     },
@@ -52,11 +66,18 @@ const data =new schema({
     {
         type:Number,
         required:true
+    },
+    PhotoFileName:
+    {
+        type:String,
+        required:true
     }
 
 })
-//const itemCol=mongoose.model("items",data)
+
+
+
 const items=mongoose.model("items",data)
-const admins= mongoose.model("admins",adminScheme)
+const suppliers= mongoose.model("suppliers",supplierScheme)
 const users=mongoose.model("users",userScheme)
-module.exports={items,admins,users}
+module.exports={suppliers,items,users}

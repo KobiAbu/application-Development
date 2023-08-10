@@ -7,10 +7,14 @@
 </head>
 <body>
   <h1>Add Item</h1>
-  <form method ="post" action="/admin/addAnItem/">
+  <form method ="post" action="/admin/addAnItem">
     <div>
       <label for="id">ID:</label>
       <input type="text" id="id" name="id" required>
+    </div>
+    <div>
+      <label for="photo">PhotoName:</label>
+      <input type="text" id="photo" name="photo" required>
     </div>
     <div>
       <label for="productName">Product Name:</label>
@@ -31,19 +35,38 @@
   <script src ="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
   <script>
     
-    $(function()
-    {
+    $(function(){
+      
       $(document.forms[0]).submit(function(e){
-                e.preventDefault();
-      $.ajax({
-        type:"POST",
-        url:"/admin/addAnItem/",
-        data:$(document.forms[0]).serialize(),
-         success: function(data)
-         {
-          document.getElementById("id").innerHTML=""
-         }
-      })})})  
+        e.preventDefault();
+        $.ajax({
+           url:"/admin/addAnItem",
+           type:"POST",
+           data:$(document.forms[0]).serialize(),
+           //contentType:"application/json; charset=utf-8",
+          //dataType:"json",
+          success: function(data){
+              document.getElementById('id').value = "";
+              document.getElementById('productName').value = "";
+              document.getElementById('price').value = "";
+              document.getElementById('stock').value = "";
+              document.getElementById('photo').value = "";
+              alert("Item Added Successfully");
+            console.log(data);
+            },
+            error:function(data){
+              document.getElementById('id').value = "";
+              document.getElementById('productName').value = "";
+              document.getElementById('price').value = "";
+              document.getElementById('stock').value = "";
+              document.getElementById('photo').value = "";
+
+              alert(data.responseText);
+  }
+});
+});
+    })
+   
   </script>
 </body>
 </html>

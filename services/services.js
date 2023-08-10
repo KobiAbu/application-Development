@@ -1,6 +1,34 @@
 
 
-const {items,admins,users} =require('../models/index')
+const { get } = require('mongoose');
+const {suppliers,items,users} =require('../models/index')
+
+const adminError = "you are not an admin";
+
+async function checkIfExist(id) 
+{
+  const query = { itemId: id };
+  const pr=await items.findOne(query)
+  console.log(pr)
+  return pr;
+
+}
+async function checkIfSupplierExist(name) 
+{
+  const query = { supplierName: name };
+  const pr=await suppliers.findOne(query)
+  console.log(pr)
+  return pr;
+
+}
+async function checkIfUserExist(name) 
+{
+  const query = { userName: name };
+  const pr=await suppliers.findOne(query)
+  console.log(pr)
+  return pr;
+
+}
 
 const getAllusers = async () => {
     try {
@@ -22,27 +50,24 @@ const getUser =async(name,password)=>
       }
 }
 
-const crateItem = async (id, productName, price, stock) => {
-    try {
-      // Assuming you have an `Admin` model to query admins by `adminId`
-    //  const admin = await admins.findById(adminId);
-  
-      //if (admin) {
+const crateItem = async (id, productName, price, stock,picture) => {
+  if(await checkIfExist(id)){
+    return null;}
+  try {
+        console.log(picture)
         const item = new items({
-          id: id,
+          itemId: id,
           productName: productName,
           price: price,
           stock: stock,
+          PhotoFileName:picture
         }
         );
   
         return await item.save();
-        
-      //} else {
-        //return null;
-      //}
-    } catch (error) {
 
+    } catch (error) {
+      console.log("error")
       return null;
     }
   };
@@ -64,69 +89,107 @@ const getAllItems =async()=>
 }
 const updateItem = async (adminId,id,productName) =>
 {
+
+}
+const deleteUser = async (id) =>{
+
     try {
-        const admin = await admins.findById(adminId);
-        if(admin){
-        await index.findByIdAndUpdate(id,{"productName":productName})
-        return 6}
+        await users.findOneAndDelete(id)
+        return "success"
       } catch (error) {
         return null;
-    
-}}
-// updateScript.js
-// document.getElementById("updateForm").addEventListener("submit", async function (event) {
-//   event.preventDefault(); // Prevent the default form submission
+      }
+}
 
-//   // Get the form data
-//   const id = document.getElementById("id").value;
-//   const productName = document.getElementById("productName").value;
-//   const price = parseFloat(document.getElementById("price").value);
-//   const stock = parseInt(document.getElementById("stock").value);
-
-//   const updatedItem = await updateItem(id, productName, price, stock);
-//   console.log(updatedItem);
-// });
-
-// async function updateItem(id, productName, price, stock) {
-//   try {
-//     const response = await fetch(`/update/${id}`, {
-//       method: "PUT",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify({ productName, price, stock }),
-//     });
-
-//     if (!response.ok) {
-//       const errorData = await response.json();
-//       throw new Error(errorData.errors.join(", "));
-//     }
-
-//     const updatedItem = await response.json();
-//     console.log("Item updated successfully:", updatedItem);
-//     return updatedItem; // You can perform any other actions upon successful update here
-
-//   } catch (error) {
-//     console.error("Error updating item:", error.message);
-//     return null; // You can display an error message or take appropriate actions here
-//   }
-// }
 
 const deleteItem = async (id) =>
 {
     try {
-        await items.findByIdAndDelete(id)
-        return 6
+        await items.findOneAndDelete(id)
+        return "succes"
       } catch (error) {
         return null;
-      }}
+      }
+}
+const updateUser = async (id,userName,password,admin,adress) =>
+{
+    
+
+}
+const createUser = async (userName,password,admin,adress) =>
+{
+  if(await checkIfUserExist(userName)){
+    return null;}
+  try {
+
+        const user = new users({
+          userName: userName,
+          password: password,
+          admin: admin,
+          adress: adress,
+          purchaseHistory: []
+        }
+        );
+  
+        return await user.save();
+
+    } catch (error) {
+      return null;
+    }
+  }
+
+const getAllSuppliers = async () => {}
+const getSupplier = async (id) => {
+    try {
+        const supplier = await suppliers.findById(id);
+        console.log(supplier)
+        return supplier;
+      } catch (error) {
+        return null;
+      }
+}
+const createSupplier = async (name, phone, email) =>
+ {
+  if(await checkIfSupplierExist(name)){
+    return null;}
+  try {
+
+        const sup = new suppliers({
+          supplierName: name,
+          phone: phone,
+          email:email
+        }
+        );
+  
+        return await item.save();
+
+    } catch (error) {
+      return null;
+    }
+ }
+const updateSupplier = async (id, name, phone, adress) => {}
+const deleteSupplier = async (id) => {}
+
+
+  
 module.exports=
 {
+    
     getAllItems,
     crateItem,
     getItemById,
     updateItem,
     deleteItem,
+
+    createUser, 
+    deleteUser,
     getAllusers,
-    getUser
+    getUser,
+    updateUser,
+
+    getAllSuppliers,
+    getSupplier,
+    createSupplier,
+    updateSupplier,
+    deleteSupplier,
 }

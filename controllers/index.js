@@ -30,18 +30,17 @@ const deleteData=async (req,res)=>
     res.send()
 }
 
-const createItem=async(req,res)=>
+const createItem=async function(req,res)
 {
     //implement premissions check
 
-    const newItem=await dataService.crateItem(req.body.id,req.body.productName,req.body.price,req.body.stock)
+    const newItem=await dataService.crateItem(req.body.id,req.body.productName,req.body.price,req.body.stock,req.body.photo)
+       if(newItem){
 
-    //generate responses
-    if(newItem){
-  
+        res.status(201).send("great")
 }
 else
-return("you dont have premission to create object")
+        res.status(400).send("item already exists")
 }
 
 const getItemById=async(req,res)=>
