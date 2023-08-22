@@ -7,7 +7,7 @@
 </head>
 <body>
   <h1>Add Item</h1>
-  <form method ="post" action="/admin/addAnItem">
+  <form id="itemForm" method ="post" action="/admin/addAnItem" enctype="multipart/form-data">
     <div>
       <label for="id">ID:</label>
       <input type="text" id="id" name="id" >
@@ -46,27 +46,21 @@
         $.ajax({
            url:"/admin/addAnItem",
            type:"POST",
-           data:$(document.forms[0]).serialize(),
+           data:{
+              id:document.getElementById('id').value,
+              photo:document.getElementById('photo').value,
+              productName:document.getElementById('productName').value,
+              price:document.getElementById('price').value,
+              stock:document.getElementById('stock').value
+           },
            //contentType:"application/json; charset=utf-8",
           //dataType:"json",
           success: function(data){
-              document.getElementById('id').value = "";
-              document.getElementById('productName').value = "";
-              document.getElementById('price').value = "";
-              document.getElementById('stock').value = "";
-              document.getElementById('photo').value = "";
-              alert("Item Added Successfully");
-            console.log(data);
-            },
-            error:function(data){
-              
-
-              if(document.getElementById('chbox').checked)
+            if(document.getElementById('chbox').checked)
               {
-                var pageId = "118111844713347"; // Your Facebook page ID here
-            var accessToken = "EAAfWSg2C55QBOx4JQGVorJeXZAyZCqTWXVIO4SPZCZBuGLbzcAXd5bsZBCPtN2jaUi9gwjV8NKIlV4GR2eHQGPwiMWrqvxJKvqqy5ZC6LBGpqGKHBtB3deIhAsmIq4ubvj5wQOnFMdG4tswQ2kIx6GYRCtzJEnAiSnR9uyVo18WdUNEcq8uAI773aBpvGJoRgLN99hlMZAD5tgxLMwJW8iwviouRUbhbBwZD"; 
-
-            var message = "New Item Added to the Store \n" + "ID: " + document.getElementById('id').value + "\n" + "Name: " + document.getElementById('productName').value + "\n" + "Price: " + document.getElementById('price').value + "\n" + "Stock: " + document.getElementById('stock').value + "\n" + "Photo: " + document.getElementById('photo').value + "\n"; 
+                var pageId = "118111844713347";
+                var accessToken = "EAAfWSg2C55QBO8r9O5Kjt5gI5jiyqRmcZBfLPwOnq0iYk5HOJZBfXUF1qQTsagqtozeaqgVUfJTHNE6cZAMkJQYJil2gYZCndm1m2ZBTZBEGOkz1B5gE1AfzKY27UPmPws5ZB7JBkMHo7EJsayRLle5y6m9z4Ik4TZAmBy2iJxi3LnI4gZCK7s1QXpYyOZA8ZAQktEXgzkNx8gZD"; 
+            var message = "New Item Added to the our website \n" + "ID: " + document.getElementById('id').value + "\n" + "Name: " + document.getElementById('productName').value + "\n" + "Price: " + document.getElementById('price').value + "\n" + "Stock: " + document.getElementById('stock').value + "\n" + "Photo: " + document.getElementById('photo').value + "\n"; 
             $.ajax({
               url: "https://graph.facebook.com/" + pageId + "/feed",
               type: "POST",
@@ -80,13 +74,20 @@
               },
               error: function(response) {
                 console.log("Error posting to Facebook!");
-                console.log(responseJSON);
+                console.log(response);
               
               }
             });
-          
-
               }
+              document.getElementById('id').value = "";
+              document.getElementById('productName').value = "";
+              document.getElementById('price').value = "";
+              document.getElementById('stock').value = "";
+              document.getElementById('photo').value = "";
+              alert("Item Added Successfully");
+            },
+            error:function(data){
+            
               document.getElementById('id').value = "";
               document.getElementById('productName').value = "";
               document.getElementById('price').value = "";

@@ -70,8 +70,8 @@ const data =new schema({
     PhotoFileName:
     {
         type:String,
-        required:true,
-        default:""
+        //required:true
+        //default:""
     }
 
 })

@@ -51,7 +51,7 @@ const getUser =async(name,password)=>
 }
 
 const crateItem = async (id, productName, price, stock,picture) => {
-  console.log(picture)
+  //console.log(picture)
 
   
 
@@ -80,7 +80,7 @@ const crateItem = async (id, productName, price, stock,picture) => {
 const getItemById =async(id)=>
 {
     try {
-        const item = await items.findById(id);
+        const item = await items.findOne({itemId: id });
         console.log(item)
         return item;
       } catch (error) {
@@ -90,7 +90,7 @@ const getItemById =async(id)=>
 const getItemByName =async(name)=>
 {
     try {
-        const item = await items.findOne({"productName": name });
+        const item = await items.findOne({productName: name });
         console.log(item)
         return item;
       } catch (error) {
@@ -101,23 +101,19 @@ const getAllItems =async()=>
 {
     return await items.find({})
 }
-const updateItem = async (adminId,id,productName) =>
+const updateItem = async (id,productName,price,stock,photo) =>
 {
-  if(await checkIfExist(id)){
-    return null;}
   try {
-        const item = await items.findOneAndUpdate(id);
-        
-
+       await items.findOneAndUpdate({itemId:id},{productName:productName,price:price,stock:stock,PhotoFileName:photo});
     } catch (error) {
       return null;
     }
 
 }
-const deleteUser = async (id) =>{
+const deleteUser = async (name) =>{
 
     try {
-        await users.findOneAndDelete(id)
+        await users.findOneAndDelete({userName:name})
         return "success"
       } catch (error) {
         return null;
@@ -128,17 +124,21 @@ const deleteUser = async (id) =>{
 const deleteItem = async (id) =>
 {
     try {
-        await items.findOneAndDelete(id)
+        await items.findOneAndDelete({itemId:id})
         return "succes"
       } catch (error) {
         return null;
       }
 }
-const updateUser = async (id,userName,password,admin,adress) =>
-{
-    
-
+const updateUser = async (id,userName,password,admin,adress,purchasesHistory) =>{
+  try{
+   await users.findOneAndUpdate({userName: id}, { userName: userName, password: password, admin: admin, adress: adress, purchasesHistory: purchasesHistory});
+    return "success"
+  }catch(error){
+    return null;
+  }
 }
+
 const createUser = async (userName,password,admin,adress) =>
 {
   if(await checkIfUserExist(userName)){
@@ -161,10 +161,17 @@ const createUser = async (userName,password,admin,adress) =>
     }
   }
 
-const getAllSuppliers = async () => {}
-const getSupplier = async (id) => {
+const getAllSuppliers = async () => {
+try{
+  const suppliers = await suppliers.find({});
+  return suppliers;
+}catch(error){
+  return null;
+}
+}
+const getSupplier = async (name) => {
     try {
-        const supplier = await suppliers.findById(id);
+        const supplier = await suppliers.findOne({supplierName:name});
         console.log(supplier)
         return supplier;
       } catch (error) {
@@ -179,23 +186,28 @@ const createSupplier = async (name, phone, email) =>
 
         const sup = new suppliers({
           supplierName: name,
-          phone: phone,
+          phoneNumber: phone,
           email:email
         }
         );
   
-        return await item.save();
+        return await sup.save();
 
     } catch (error) {
       return null;
     }
  }
-const updateSupplier = async (id, name, phone, adress) => {
-
-}
-const deleteSupplier = async (id) => {
+const updateSupplier = async ( name, phone, email) => {
   try{
-    await suppliers.findOneAndDelete(id)
+   await suppliers.findOneAndUpdate({supplierName: name}, { phoneNumber: phone, email: email});
+    return "success"
+  }catch(error){
+    return null;
+  }
+}
+const deleteSupplier = async (name) => {
+  try{
+    await suppliers.findOneAndDelete({supplierName: name})
     return "success"
   }catch(error){
     return null;
@@ -206,8 +218,7 @@ const deleteSupplier = async (id) => {
 
   
 module.exports=
-{
-    
+{ 
     getAllItems,
     crateItem,
     getItemByName,
