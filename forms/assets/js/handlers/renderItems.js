@@ -3,7 +3,7 @@ function renderItems(items) {
     container.innerHTML = '';
     let currentRow = null;
     items.forEach((item, index) => {
-        const image = `assets/img/2.jpeg`;
+        const image = `assets/img/` + item.PhotoFileName;
         const price = item.price;
         const productName = item.productName;
 

@@ -31,7 +31,9 @@ router.post('/admin/addAnItem', dataController.createItem)
 
 
 router.get('/getItems', dataController.getItems)
-router.get('/search', dataController.searchByParams)
+
+//router.get('/getSpecificItems', dataController.getSpecificItems)
+router.post('/search', dataController.searchByParams)
 
 
 module.exports = router
