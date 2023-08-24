@@ -12,7 +12,7 @@ const updateData=async (req,res)=>
     {
         return res.status(400).json({errors:["id is required"]})
     }
-    const item=await dataService.updateItem(req.params.adminId,req.params.id,req.params.productName)
+    const item=await dataService.updateItem(req.params.id,req.params.productName,req.params.price,req.params.stock,req.params.photo,req.params.gender)
     if(!item)
         {return res.status(404).json({errors:["something went wrong"]})}
      return res.json(item)
@@ -34,8 +34,7 @@ const createItem= async (req,res)=>
 {
     //implement premissions check
     const name=req.body.photo
-    const newItem=await dataService.crateItem(req.body.id,req.body.productName,req.body.price,req.body.stock,name)
-    console.log(newItem)
+    const newItem=await dataService.crateItem(req.body.id,req.body.productName,req.body.price,req.body.stock,name,req.body.gender,req.body.type)
        if(newItem){
    
         res.status(201).send("great")
@@ -65,10 +64,41 @@ const getItemByName=async(req,res)=>
         return res.status(404).json({errors:["item not found"]})
 }
 
+const searchByParams=async(req,res)=>
+{
+    let list=[]
+    if(req.params.price)
+    {
+        list.push(["price",req.params.price])
+    }
+    // if(req.params.type)
+    // {
+    //     list.push(["type",req.params.type])
+    // }
+    if(req.params.gender)
+    {
+        list.push(["gender",req.params.gender])
+    }
+    const c= await dataService.searchByParams(list)
+    const list2=[]
+    c.forEach(element => {
+        list2.push(element.itemId)
+    });
+   // console.log(c)
+   
+    if(c)
+    {
+       return list2}
+    else
+    return res.status(404).json({errors:["item not found"]})}
+
+
 module.exports={
     createItem,
     getItems,
     getItemById,
     updateData,
     deleteData,
+    getItemByName,
+    searchByParams
 }

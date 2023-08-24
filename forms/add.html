@@ -14,11 +14,20 @@
     </div>
     <div>
       <label for="photo">PhotoName:</label>
-      <input type="file" id="photo" name="photo" accept="image/*" >
+      <input type="text" id="photo" name="photo" accept="image/*" >
     </div>
     <div>
       <label for="productName">Product Name:</label>
       <input type="text" id="productName" name="productName" >
+    </div>
+    <div>
+      <label for="gender">Gender:</label>
+      <input type="text" id="Gender" name="Gender" >
+    </div>
+    
+    <div>
+      <label for="type">type:</label>
+      <input type="text" id="type" name="Type" >
     </div>
     <div>
       <label for="price">Price:</label>
@@ -51,7 +60,10 @@
               photo:document.getElementById('photo').value,
               productName:document.getElementById('productName').value,
               price:document.getElementById('price').value,
-              stock:document.getElementById('stock').value
+              stock:document.getElementById('stock').value,
+              gender:document.getElementById('Gender').value
+              ,type:document.getElementById('type').value
+
            },
            //contentType:"application/json; charset=utf-8",
           //dataType:"json",
@@ -98,8 +110,7 @@
   }
 });
 });
-    })
-   
+    });
   </script>
 </body>
 </html>

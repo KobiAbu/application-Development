@@ -1,10 +1,51 @@
 
 
 const { get } = require('mongoose');
-const {suppliers,items,users} =require('../models/index')
+const {orders,items,users} =require('../models/index');
 
-const adminError = "you are not an admin";
-
+async function searchByParams(list)
+{
+  groupByFields={}
+  list.forEach(query=>
+    {
+      if(query[0]==='gender')
+      {
+        groupByFields.gender=query[1];  
+      }
+      
+      if(query[0]==='price')
+      {
+        groupByFields.price={
+          $gte: 0,
+          $lte: parseInt(query[1]),
+        };
+        }
+      
+      if( query[0]==='type')
+      {
+        groupByFields.type=query[1];
+      }
+    })
+    const aggregatePipeline = [];
+    if (Object.keys(groupByFields).length > 0) {
+      aggregatePipeline.push({
+        $match: groupByFields,
+      });
+      // aggregatePipeline.push({
+      //   $group: {
+      //     _id: {
+      //       type: '$type',
+      //       gender: '$gender',
+      //       price: '$price',
+      //     },
+      //   },
+      // });
+    
+      const result = await items.aggregate(aggregatePipeline)
+      return result
+    
+  }
+}
 async function checkIfExist(id) 
 {
   const query = { itemId: id };
@@ -13,10 +54,10 @@ async function checkIfExist(id)
   return pr;
 
 }
-async function checkIfSupplierExist(name) 
+async function checkIfOrderExist(orderid) 
 {
-  const query = { supplierName: name };
-  const pr=await suppliers.findOne(query)
+  const query = { OrderId: orderid };
+  const pr=await orders.findOne(query)
   console.log(pr)
   return pr;
 
@@ -50,11 +91,7 @@ const getUser =async(name,password)=>
       }
 }
 
-const crateItem = async (id, productName, price, stock,picture) => {
-  //console.log(picture)
-
-  
-
+const crateItem = async (id, productName, price, stock,picture,gender,type) => {
   if(await checkIfExist(id)){
     return null;}
   try {
@@ -64,7 +101,9 @@ const crateItem = async (id, productName, price, stock,picture) => {
           productName: productName,
           price: price,
           stock: stock,
-          PhotoFileName:picture
+          PhotoFileName:picture,
+          gender:gender,
+          type:type
         }
         );
   
@@ -101,10 +140,10 @@ const getAllItems =async()=>
 {
     return await items.find({})
 }
-const updateItem = async (id,productName,price,stock,photo) =>
+const updateItem = async (id,productName,price,stock,photo,gender) =>
 {
   try {
-       await items.findOneAndUpdate({itemId:id},{productName:productName,price:price,stock:stock,PhotoFileName:photo});
+       await items.findOneAndUpdate({itemId:id},{productName:productName,price:price,stock:stock,PhotoFileName:photo,gender:gender});
     } catch (error) {
       return null;
     }
@@ -161,54 +200,57 @@ const createUser = async (userName,password,admin,adress) =>
     }
   }
 
-const getAllSuppliers = async () => {
+const getAllOrders = async () => {
 try{
-  const suppliers = await suppliers.find({});
-  return suppliers;
+  const orders = await orders.find({});
+  return orders;
 }catch(error){
   return null;
 }
 }
-const getSupplier = async (name) => {
+const getOrder = async (orderid) => {
     try {
-        const supplier = await suppliers.findOne({supplierName:name});
-        console.log(supplier)
-        return supplier;
+        const order = await orders.findOne({OrderId:orderid});
+        console.log(order)
+        return order;
       } catch (error) {
         return null;
       }
 }
-const createSupplier = async (name, phone, email) =>
- {
-  if(await checkIfSupplierExist(name)){
+const createOrder = async (orderid,totalAmount,date,user,items) => {
+  if(await checkIfOrderExist(orderid)){
     return null;}
   try {
-
-        const sup = new suppliers({
-          supplierName: name,
-          phoneNumber: phone,
-          email:email
+        const order = new orders({
+          OrderId: orderid,
+          totalAmount: totalAmount,
+          date: date,
+          user: user,
+          items: items
         }
         );
   
-        return await sup.save();
+        return await order.save();
 
     } catch (error) {
       return null;
     }
- }
-const updateSupplier = async ( name, phone, email) => {
+  }
+
+
+
+const updateOrder = async (orderid,totalAmount,date,user,items) =>{
   try{
-   await suppliers.findOneAndUpdate({supplierName: name}, { phoneNumber: phone, email: email});
+   await orders.findOneAndUpdate({OrderId:orderid},{totalAmount:totalAmount,date:date,user:user,items:items});
     return "success"
   }catch(error){
     return null;
   }
 }
-const deleteSupplier = async (name) => {
+const deleteOrder = async (orderid) =>{
   try{
-    await suppliers.findOneAndDelete({supplierName: name})
-    return "success"
+    await orders.findOneAndDelete({OrderId:orderid});
+      return "success"
   }catch(error){
     return null;
   }
@@ -232,9 +274,11 @@ module.exports=
     getUser,
     updateUser,
 
-    getAllSuppliers,
-    getSupplier,
-    createSupplier,
-    updateSupplier,
-    deleteSupplier,
+    getAllOrders,
+    getOrder,
+    createOrder,
+    updateOrder,
+    deleteOrder,
+
+    searchByParams
 }

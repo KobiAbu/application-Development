@@ -4,8 +4,12 @@ const schema=mongoose.Schema
 const orderScheme=new schema(
     
     {
+        OrderId:{
+        type:String,
+        required:true
+        },
         totalAmount:{
-        type:int,
+        type:Number,
         required:true
         },
         date:{
@@ -13,7 +17,7 @@ const orderScheme=new schema(
             required:true
         },
         user:{
-            type:userScheme,
+            type:mongoose.Schema.Types.ObjectId,ref:'users'
         },
         items:[{type:mongoose.Schema.Types.ObjectId,ref:'items'}]
         
@@ -69,6 +73,14 @@ const data =new schema({
     PhotoFileName:
     {
         type:String
+    },
+    gender:{
+        type:String,
+        required:true
+    },
+    type:{
+        type:String,
+        required:true
     }
 
 })

@@ -31,6 +31,7 @@ router.post('/admin/addAnItem',dataController.createItem)
 
 
 router.get(dataController.getItemById)
+router.get('/search/:price/:gender',dataController.searchByParams)
 
 
 module.exports=router
