@@ -1,20 +1,22 @@
 const mongoose= require('mongoose')
 const schema=mongoose.Schema
 
-const supplierScheme=new schema(
+const orderScheme=new schema(
     
     {
-        supplierName:{
-        type:String,
+        totalAmount:{
+        type:int,
         required:true
         },
-        phoneNumber:{
-            type:String,
+        date:{
+            type:Date,
             required:true
         },
-        email:{
-            type:String,
+        user:{
+            type:userScheme,
         },
+        items:[{type:mongoose.Schema.Types.ObjectId,ref:'items'}]
+        
     }
 )
 const userScheme=new schema(
@@ -34,10 +36,7 @@ const userScheme=new schema(
               type:Boolean,
               default:false
        },
-       purchasesHistory:{
-              type:Array,
-             default:[]
-       }
+       orders:[{type:mongoose.Schema.Types.ObjectId,ref:'orders'}]
        ,adress:
        {
         type:String,
@@ -69,9 +68,7 @@ const data =new schema({
     },
     PhotoFileName:
     {
-        type:String,
-        //required:true
-        //default:""
+        type:String
     }
 
 })
@@ -79,6 +76,6 @@ const data =new schema({
 
 
 const items=mongoose.model("items",data)
-const suppliers= mongoose.model("suppliers",supplierScheme)
+const orders= mongoose.model("orders",orderScheme)
 const users=mongoose.model("users",userScheme)
-module.exports={suppliers,items,users}
+module.exports={orders,items,users}
