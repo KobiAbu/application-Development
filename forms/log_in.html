@@ -69,16 +69,18 @@
     <script src="assets/js/bs-init.js"></script>
     <script src="assets/js/Grid-and-List-view-V10-script.js"></script>
     <script>
+
         $("button").click(function (e) {
             e.preventDefault();
+            const email = document.getElementById('email').value
+            const password = document.getElementById('password').value
             $.ajax({
                 type: "GET",
-                url: "/getUser",
-                data: {
-                    id: document.getElementById('email').value,
-                    password: document.getElementById('password').value
-                },
+                url: "/getUser/" + password + "/" + email,
+
                 success: function (result) {
+                    //need to implement tokens and redirect
+                    alert("succes")
                 },
                 error: function (result) {
                     document.getElementById('email').value = ''

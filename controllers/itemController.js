@@ -76,8 +76,7 @@ const searchByParams = async (req, res) => {
         return res.status(404).json({ errors: ["item not found"] })
 }
 const getUser = async (req, res) => {
-
-    const c = await dataService.getUser(req.body.id, req.body.password)
+    const c = await dataService.getUser(req.params.email, req.params.password)
     if (c) {
         res.status(201).send("great")
     }
@@ -85,7 +84,8 @@ const getUser = async (req, res) => {
         return res.status(404).json({ errors: ["user not found"] })
 }
 const createUser = async (req, res) => {
-    const c = await dataService.createUser(req.body.email, req.body.password)
+    const c = await dataService.createUser(req.body.id, req.body.password)
+    console.log(c)
     if (c) {
         res.status(201).send("great")
     }

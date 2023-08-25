@@ -30,7 +30,7 @@ router.post('/admin/addAnItem', dataController.createItem)
 
 
 router.get('/getItems', dataController.getItems)
-router.get('/getUser', dataController.getUser)
+router.get('/getUser/:password/:email', dataController.getUser)
 router.get('/getUserById/:email', dataController.getUserById)
 
 
