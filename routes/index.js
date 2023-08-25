@@ -5,7 +5,6 @@ const { dirname } = require('path');
 const { json } = require('body-parser');
 const appDir = dirname(require.main.filename)
 const path = require('path');
-const multer = require('multer');
 router.use(express.static(path.join(appDir, 'forms')));
 
 
@@ -26,11 +25,14 @@ router.route('/admin/edit').get((req, res) => {
 })
 router.post('/admin/update', dataController.updateData)
 router.get('/admin/update/:id', dataController.updateData)
-
+router.post('/createUser', dataController.createUser)
 router.post('/admin/addAnItem', dataController.createItem)
 
 
 router.get('/getItems', dataController.getItems)
+router.get('/getUser', dataController.getUser)
+router.get('/getUserById/:email', dataController.getUserById)
+
 
 //router.get('/getSpecificItems', dataController.getSpecificItems)
 router.post('/search', dataController.searchByParams)

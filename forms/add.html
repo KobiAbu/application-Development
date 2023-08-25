@@ -1,116 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Add Item Form</title>
 </head>
+
 <body>
   <h1>Add Item</h1>
-  <form id="itemForm" method ="post" action="/admin/addAnItem" enctype="multipart/form-data">
+  <form id="itemForm" method="post" action="/admin/addAnItem" enctype="multipart/form-data">
     <div>
       <label for="id">ID:</label>
-      <input type="text" id="id" name="id" >
+      <input type="text" id="id" name="id" required>
     </div>
     <div>
       <label for="photo">PhotoName:</label>
-      <input type="text" id="photo" name="photo" accept="image/*" >
+      <input type="text" id="photo" name="photo" accept="image/*" required>
     </div>
     <div>
       <label for="productName">Product Name:</label>
-      <input type="text" id="productName" name="productName" >
+      <input type="text" id="productName" name="productName" required>
     </div>
     <div>
       <label for="gender">Gender:</label>
-      <input type="text" id="Gender" name="Gender" >
+      <input type="text" id="Gender" name="Gender" required>
     </div>
-    
+
     <div>
       <label for="type">type:</label>
-      <input type="text" id="type" name="Type" >
+      <input type="text" id="type" name="Type" required>
     </div>
     <div>
       <label for="price">Price:</label>
-      <input type="number" id="price" name="price" step="1" >
+      <input type="number" id="price" name="price" step="1" required>
     </div>
     <div>
       <label for="stock">Stock:</label>
-      <input type="number" id="stock" name="stock" >
+      <input type="number" id="stock" name="stock" required>
     </div>
     <div>
       <input type="submit" value="Add Item">
     </div>
     <div>
       <input type="checkbox" id="chbox" name="chbox">
-<label for="chbox"> publish on facebook?</label><br>
+      <label for="chbox"> publish on facebook?</label><br>
     </div>
   </form>
-  <script src ="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
   <script>
-    
-    $(function(){
-      
-      $(document.forms[0]).submit(function(e){
+
+    $(function () {
+
+      $(document.forms[0]).submit(function (e) {
         e.preventDefault();
         $.ajax({
-           url:"/admin/addAnItem",
-           type:"POST",
-           data:{
-              id:document.getElementById('id').value,
-              photo:document.getElementById('photo').value,
-              productName:document.getElementById('productName').value,
-              price:document.getElementById('price').value,
-              stock:document.getElementById('stock').value,
-              gender:document.getElementById('Gender').value
-              ,type:document.getElementById('type').value
+          url: "/admin/addAnItem",
+          type: "POST",
+          data: {
+            id: document.getElementById('id').value,
+            photo: document.getElementById('photo').value,
+            productName: document.getElementById('productName').value,
+            price: document.getElementById('price').value,
+            stock: document.getElementById('stock').value,
+            gender: document.getElementById('Gender').value
+            , type: document.getElementById('type').value
 
-           },
-           //contentType:"application/json; charset=utf-8",
+          },
+          //contentType:"application/json; charset=utf-8",
           //dataType:"json",
-          success: function(data){
-            if(document.getElementById('chbox').checked)
-              {
-                var pageId = "118111844713347";
-                var accessToken = "EAAfWSg2C55QBO8r9O5Kjt5gI5jiyqRmcZBfLPwOnq0iYk5HOJZBfXUF1qQTsagqtozeaqgVUfJTHNE6cZAMkJQYJil2gYZCndm1m2ZBTZBEGOkz1B5gE1AfzKY27UPmPws5ZB7JBkMHo7EJsayRLle5y6m9z4Ik4TZAmBy2iJxi3LnI4gZCK7s1QXpYyOZA8ZAQktEXgzkNx8gZD"; 
-            var message = "New Item Added to the our website \n" + "ID: " + document.getElementById('id').value + "\n" + "Name: " + document.getElementById('productName').value + "\n" + "Price: " + document.getElementById('price').value + "\n" + "Stock: " + document.getElementById('stock').value + "\n" + "Photo: " + document.getElementById('photo').value + "\n"; 
-            $.ajax({
-              url: "https://graph.facebook.com/" + pageId + "/feed",
-              type: "POST",
-              data: {
-                message: message,
-                access_token: accessToken
-              },
-              success: function(response) {
-                console.log("Posted to Facebook successfully!");
-                console.log(response);
-              },
-              error: function(response) {
-                console.log("Error posting to Facebook!");
-                console.log(response);
-              
-              }
-            });
-              }
-              document.getElementById('id').value = "";
-              document.getElementById('productName').value = "";
-              document.getElementById('price').value = "";
-              document.getElementById('stock').value = "";
-              document.getElementById('photo').value = "";
-              alert("Item Added Successfully");
-            },
-            error:function(data){
-            
-              document.getElementById('id').value = "";
-              document.getElementById('productName').value = "";
-              document.getElementById('price').value = "";
-              document.getElementById('stock').value = "";
-              document.getElementById('photo').value = "";
+          success: function (data) {
+            if (document.getElementById('chbox').checked) {
+              var pageId = "118111844713347";
+              var accessToken = "EAAfWSg2C55QBO8r9O5Kjt5gI5jiyqRmcZBfLPwOnq0iYk5HOJZBfXUF1qQTsagqtozeaqgVUfJTHNE6cZAMkJQYJil2gYZCndm1m2ZBTZBEGOkz1B5gE1AfzKY27UPmPws5ZB7JBkMHo7EJsayRLle5y6m9z4Ik4TZAmBy2iJxi3LnI4gZCK7s1QXpYyOZA8ZAQktEXgzkNx8gZD";
+              var message = "New Item Added to the our website \n" + "ID: " + document.getElementById('id').value + "\n" + "Name: " + document.getElementById('productName').value + "\n" + "Price: " + document.getElementById('price').value + "\n" + "Stock: " + document.getElementById('stock').value + "\n" + "Photo: " + document.getElementById('photo').value + "\n";
+              $.ajax({
+                url: "https://graph.facebook.com/" + pageId + "/feed",
+                type: "POST",
+                data: {
+                  message: message,
+                  access_token: accessToken
+                },
+                success: function (response) {
+                  console.log("Posted to Facebook successfully!");
+                  console.log(response);
+                },
+                error: function (response) {
+                  console.log("Error posting to Facebook!");
+                  console.log(response);
 
-              alert(data.responseText);
-  }
-});
-});
+                }
+              });
+            }
+            document.getElementById('id').value = "";
+            document.getElementById('productName').value = "";
+            document.getElementById('price').value = "";
+            document.getElementById('stock').value = "";
+            document.getElementById('photo').value = "";
+            document.getElementById('Gender').value = "";
+            document.getElementById('type').value = "";
+            alert("Item Added Successfully");
+          },
+          error: function (data) {
+
+            document.getElementById('id').value = "";
+            document.getElementById('productName').value = "";
+            document.getElementById('price').value = "";
+            document.getElementById('stock').value = "";
+            document.getElementById('photo').value = "";
+
+            alert(data.responseText);
+          }
+        });
+      });
     });
   </script>
 </body>
+
 </html>
