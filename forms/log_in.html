@@ -30,7 +30,7 @@
                     <li class="nav-item"><a class="nav-link" href="products.html">catalog</a></li>
                     <li class="nav-item"><a class="nav-link" href="sign_up.html">sign up</a></li>
                 </ul>
-            </div><a class="btn btn-primary ms-auto" role="button" href="/cart.html">cart</a>
+            </div><a class="btn btn-primary ms-auto" role="button" href="cart.html">cart</a>
         </div>
         </div>
     </nav>
@@ -69,7 +69,6 @@
     <script src="assets/js/bs-init.js"></script>
     <script src="assets/js/Grid-and-List-view-V10-script.js"></script>
     <script>
-
         $("button").click(function (e) {
             e.preventDefault();
             const email = document.getElementById('email').value
@@ -79,7 +78,6 @@
                 url: "/getUser/" + password + "/" + email,
 
                 success: function (result) {
-                    //need to implement tokens and redirect
                     alert("succes")
                 },
                 error: function (result) {

@@ -82,14 +82,13 @@ const getUser = async (name, password) => {
   }
 }
 
-const crateItem = async (id, productName, price, stock, picture, gender, type) => {
+const crateItem = async ( productName, price, stock, picture, gender, type) => {
   if (await checkIfExist(id)) {
     return null;
   }
   try {
     //console.log(picture)
     const item = new items({
-      itemId: id,
       productName: productName,
       price: price,
       stock: stock,
@@ -109,9 +108,10 @@ const crateItem = async (id, productName, price, stock, picture, gender, type) =
 
 
 const getItemById = async (id) => {
+  
   try {
-    const item = await items.findOne({ itemId: id });
-    console.log(item)
+    const item = await items.findById(id);
+   // console.log(item)
     return item;
   } catch (error) {
     return null;

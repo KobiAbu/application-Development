@@ -45,6 +45,5 @@ $(document).ready(async function () {
         }
         renderItems(newItems)
 
-
     }
 });

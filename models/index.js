@@ -4,10 +4,7 @@ const schema = mongoose.Schema
 const orderScheme = new schema(
 
     {
-        OrderId: {
-            type: String,
-            required: true
-        },
+        
         totalAmount: {
             type: Number,
             required: true
@@ -50,10 +47,7 @@ const userScheme = new schema(
     })
 
 const data = new schema({
-    itemId: {
-        type: String,
-        required: true
-    },
+   
     productName:
     {
         type: String,

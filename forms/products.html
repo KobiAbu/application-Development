@@ -1,57 +1,72 @@
-<!DOCTYPE html>
-<html data-bs-theme="light" lang="en">
+    <!DOCTYPE html>
+    <html data-bs-theme="light" lang="en">
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Gold Street</title>
-    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/css/styles.min.css">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+        <title>Gold Street</title>
+        <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="assets/css/styles.min.css">
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
-</head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+    </head>
 
-<body>
-    <nav class="navbar navbar-expand-md bg-body">
-        <div class="container-fluid"><a class="nav-link" href="index.html"><strong><span
-                        style="background-color: rgb(231, 228, 220);">GOLD STRRET</span></strong></a><button
-                data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-1"><span
-                    class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
-            <div class="collapse navbar-collapse" id="navcol-1">
-                <ul class="navbar-nav">
-
-                </ul><button class="btn btn-primary ms-auto" type="button"><span
-                        style="color: rgb(248, 246, 246); background-color: rgb(102, 103, 118);">CART</span></button>
-            </div>
+    <body id="gridContainer">
+        <div class="collapse navbar-collapse" id="navcol-1">
+            <ul class="nav nav-tabs">
+                <li class="nav-item"><a class="nav-link" href="products.html">catalog</a></li>
+                <li class="nav-item"><a class="nav-link" href="sign_up.html">sign up</a><a class="nav-link"
+                        href="log_in.html">log in</a></li>
+            </ul>
+            <a class="btn btn-primary ms-auto" role="button" href="/cart.html">cart</a><a class="navbar-brand"
+                href="index.html">Gold street</a>
         </div>
-    </nav>
-    <h1 style="text-align: center;"><strong>Products</strong></h1>
-    <select name="price-range" id="price-range">
-        <option value="">Price</option>
-        <option value="500">500</option>
-        <option value="1000">1000</option>
-        <option value="1500">1500</option>
-        <option value="2000">2000</option>
-        <option value="2500">2500</option>
-    </select>
-    <select name="type" id="type">
-        <option value="">Type</option>
-        <option value="earings">Earings</option>
-        <option value="bracelet">Bracelet</option>
-        <option value="necklace">Necklace</option>
-        <option value="ring">Ring</option>
-    </select>
-    <select name="gender" id="gender">
-        <option value="">Gender</option>
-        <option value="male">Male</option>
-        <option value="female">Female</option>
-    </select>
-    <div class="container py-4 py-xl-5" id="container">
+        <nav class="navbar navbar-expand-md navbar-light">
+            <div class="container-fluid"><img src="assets/img/Letter-G-Jewelry-Logo%20(1).jpg" width="38" height="38"><a
+                    class="navbar-brand" href="index.html">Gold street</a>
+                <div class="collapse navbar-collapse" id="navcol-2" style="margin-left: 17px;">
+                    <ul class="navbar-nav" style="width: 432.125px;padding-right: 0px;">
+                        <li class="nav-item"><a class="nav-link" href="#"></a></li>
+                        <li class="nav-item"><a class="nav-link" href="products.html"
+                                style="margin-left: -84px;">catalog</a></li>
+                        <li class="nav-item"><a class="nav-link" href="sign_up.html">sign up</a></li>
+    
+                        <li class="nav-item"><a class="nav-link" href="log_in.html">log in</a></li>
+                    </ul>
+                    <a class="btn btn-primary ms-auto" role="button" href="/cart.html">cart</a>
+                </div>
+            </div>
+        </nav>
+        <h1 style="text-align: center;"><strong>Products</strong></h1>
+        <select name="price-range" id="price-range">
+            <option value="">Price</option>
+            <option value="500">500</option>
+            <option value="1000">1000</option>
+            <option value="1500">1500</option>
+            <option value="2000">2000</option>
+            <option value="2500">2500</option>
+        </select>
+        <select name="type" id="type">
+            <option value="">Type</option>
+            <option value="earings">Earings</option>
+            <option value="bracelet">Bracelet</option>
+            <option value="necklace">Necklace</option>
+            <option value="ring">Ring</option>
+        </select>
+        <select name="gender" id="gender">
+            <option value="">Gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+        </select>
+        <div class="container py-4 py-xl-5" id="container">
 
-    </div>
-    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-    <script src="assets/js/script.min.js"></script>
-    <script type="module" src="assets/js/products.js"></script>
-</body>
+        </div>
+        
+        <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+        <script src="assets/js/script.min.js"></script>
+        <script type="module" src="assets/js/products.js"></script>
 
-</html>
+
+    </body>
+
+    </html>

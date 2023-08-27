@@ -33,4 +33,4 @@ async function getSpecificItems(list) {
     });
 }
 
-export { getAllItems, getSpecificItems }
+export { getAllItems, getSpecificItems}

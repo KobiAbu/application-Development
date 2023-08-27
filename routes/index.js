@@ -31,7 +31,9 @@ router.post('/admin/addAnItem', dataController.createItem)
 
 router.get('/getItems', dataController.getItems)
 router.get('/getUser/:password/:email', dataController.getUser)
-router.get('/getUserById/:email', dataController.getUserById)
+router.get('/getUserById/:id', dataController.getUserById)
+router.get('/getItemById/:id', dataController.getItemById);
+
 
 
 //router.get('/getSpecificItems', dataController.getSpecificItems)

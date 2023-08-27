@@ -10,10 +10,7 @@
 <body>
   <h1>Add Item</h1>
   <form id="itemForm" method="post" action="/admin/addAnItem" enctype="multipart/form-data">
-    <div>
-      <label for="id">ID:</label>
-      <input type="text" id="id" name="id" required>
-    </div>
+   
     <div>
       <label for="photo">PhotoName:</label>
       <input type="text" id="photo" name="photo" accept="image/*" required>
@@ -58,7 +55,7 @@
           url: "/admin/addAnItem",
           type: "POST",
           data: {
-            id: document.getElementById('id').value,
+
             photo: document.getElementById('photo').value,
             productName: document.getElementById('productName').value,
             price: document.getElementById('price').value,
@@ -92,7 +89,7 @@
                 }
               });
             }
-            document.getElementById('id').value = "";
+            
             document.getElementById('productName').value = "";
             document.getElementById('price').value = "";
             document.getElementById('stock').value = "";
@@ -103,7 +100,7 @@
           },
           error: function (data) {
 
-            document.getElementById('id').value = "";
+            
             document.getElementById('productName').value = "";
             document.getElementById('price').value = "";
             document.getElementById('stock').value = "";
