@@ -13,6 +13,16 @@ const updateData = async (req, res) => {
     if (!item) { return res.status(404).json({ errors: ["something went wrong"] }) }
     return res.json(item)
 }
+const createOrder = async (req, res) => {
+
+
+    const c = await dataService.createOrder(req.body.totalAmount, req.body.user, req.body.items)
+    if (c) {
+        res.status(201).send("great")
+    }
+    else
+        return res.status(404).json({ errors: ["cant create Order"] })
+}
 
 const deleteData = async (req, res) => {
     const newItem = await dataService.deleteItem(req.params.id)
@@ -75,44 +85,17 @@ const searchByParams = async (req, res) => {
     else
         return res.status(404).json({ errors: ["item not found"] })
 }
-const getUser = async (req, res) => {
-    const c = await dataService.getUser(req.params.email, req.params.password)
-    if (c) {
-        res.status(201).send("great")
-    }
-    else
-        return res.status(404).json({ errors: ["user not found"] })
-}
-const createUser = async (req, res) => {
-    const c = await dataService.createUser(req.body.id, req.body.password)
-    console.log(c)
-    if (c) {
-        res.status(201).send("great")
-    }
-    else
-        return res.status(404).json({ errors: ["cant create user"] })
 
-}
-const getUserById = async (req, res) => {
 
-    const c = await dataService.getUserById(req.params.email)
-    if (c) {
-        res.status(201).send("great")
-    }
-    else
-        return res.status(404).json({ errors: ["user not found"] })
-}
 
 
 module.exports = {
-    getUserById,
-    getUser,
-    createUser,
     createItem,
     getItems,
     getItemById,
     updateData,
     deleteData,
     getItemByName,
-    searchByParams
+    searchByParams,
+    createOrder
 }

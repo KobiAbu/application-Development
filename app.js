@@ -6,6 +6,8 @@ const bodyParser = require('body-parser');
 const cors=require('cors')
 const http = require('http');
 const socketIO = require('socket.io');
+const session = require('express-session');
+const cookieParser = require("cookie-parser");
 
 
 
@@ -39,9 +41,14 @@ io.on('connection', (socket) => {
         io.emit('new message', msg);
     });
 });
+app.use(session({
+    secret: 'SecretKey', // A secret key for signing the session ID cookie
+    resave: false,             // Forces the session to be saved back to the session store
+    saveUninitialized: true,  // Forces a session that is "uninitialized" to be saved to the store
+    cookie: { maxAge:1000 * 60 * 60 * 24000000 }  // If running on HTTPS, set secure to true
+  }));
 
-
-
+app.use(cookieParser())
 //app.set('view enjine','ejs')
 server.listen(process.env.PORT, () => {
     console.log('Server started on port 8082');})

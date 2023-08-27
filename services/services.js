@@ -3,6 +3,7 @@
 const { get } = require('mongoose');
 const { orders, items, users } = require('../models/index');
 
+
 async function searchByParams(list) {
   groupByFields = {}
   list.forEach(query => {
@@ -75,7 +76,6 @@ const getAllusers = async () => {
 const getUser = async (name, password) => {
   try {
     const user = await users.findOne({ userName: name, password: password });
-    console.log(user)
     return user;
   } catch (error) {
     return null;
@@ -199,26 +199,7 @@ const getOrder = async (orderid) => {
     return null;
   }
 }
-const createOrder = async (orderid, totalAmount, date, user, items) => {
-  if (await checkIfOrderExist(orderid)) {
-    return null;
-  }
-  try {
-    const order = new orders({
-      OrderId: orderid,
-      totalAmount: totalAmount,
-      date: date,
-      user: user,
-      items: items
-    }
-    );
 
-    return await order.save();
-
-  } catch (error) {
-    return null;
-  }
-}
 
 
 
@@ -240,12 +221,32 @@ const deleteOrder = async (orderid) => {
   }
 }
 
-const getUserById = async (name) => {
+const getUserById = async (id) => {
   try {
-    console.log(name)
-    const user = await users.findOne({ userName: name });
+    //console.log(name)
+    const user = await users.findById(id);
     console.log(user)
     return user;
+  } catch (error) {
+    return null;
+  }
+}
+const createOrder = async (totalAmount, user, items) => {
+  try {
+    const order = new orders({
+      totalAmount: totalAmount,
+      user: user,
+      items: items
+    },
+    );
+    user = await users.findById(user._id).populate("orders")
+    const newOrder = await order.save();
+    if (newOrder) {
+      user.orders.push(newOrder);
+      await user.save()
+    }
+    return await newOrder
+
   } catch (error) {
     return null;
   }

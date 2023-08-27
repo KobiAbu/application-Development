@@ -76,9 +76,18 @@
             $.ajax({
                 type: "GET",
                 url: "/getUser/" + password + "/" + email,
-
                 success: function (result) {
-                    alert("succes")
+                   
+                        if(result.userType==='admin')
+                        {
+                           
+                        }
+                        else if(result.userType==='user')
+                        {
+                            window.location.href = "./index.html";
+                        }
+                    
+                    
                 },
                 error: function (result) {
                     document.getElementById('email').value = ''
