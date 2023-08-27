@@ -22,6 +22,7 @@ $(document).ready(async function () {
     });
     async function helper() {
         const data = {}
+        let newItems
         const priceValue = $('#price-range').val();
         if (priceValue) {
             data.price = parseInt(priceValue)
@@ -34,8 +35,16 @@ $(document).ready(async function () {
         if (typeValue) {
             data.type = typeValue
         }
-        const newItems = await getSpecificItems(data);
-        console.log(newItems)
+        if (typeValue || priceValue || genderValue) {
+            console.log("enter")
+            newItems = await getSpecificItems(data);
+            console.log(newItems)
+        }
+        else {
+            newItems = await getAllItems();
+        }
         renderItems(newItems)
+
+
     }
 });
