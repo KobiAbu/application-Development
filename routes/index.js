@@ -50,7 +50,7 @@ router.get('/kill', (req, res) => {
     req.session = null
     res.status(201).send("great")
 });
-
+router.delete('/admin/deleteUser/:userName', ensureAdmin, loginController.deleteUser);
 router.post('/admin/update', ensureAdmin, dataController.updateData)
 router.get('/admin/update/:id', ensureAdmin, dataController.updateData)
 router.post('/createUser', loginController.createUser)

@@ -46,10 +46,13 @@ const updateUser = async (req,res) => {
 }
 
 const deleteUser = async (req, res) => {
-    const User = await UserService.deleteUser(req.body.email);
-    if (User)
-        return res.redirect('/admin')
-    else return res.redirect('/admin/deleteUser?error=1');
+    const User = await UserService.deleteUser(req.params.userName);
+    if (!User)
+    { return res.status(404).json({ errors: ["User not found"] }) }
+    else {
+        res.json("User deleted")
+    }
+    
 }
 const getUserById = async (req, res) => {
     const c = await dataService.getUserById(req.params.id)

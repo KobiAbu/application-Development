@@ -31,11 +31,12 @@ const updateUser = async (existingEmail, newEmail, newPassword) => {
 }
 
 const deleteUser = async (email) => {
-    const user = await getUser(email);
-    if (!user)
-        return null;
-    await user.deleteOne();
-    return user;
+ try{
+    await users.findOneAndDelete({ userName: email })
+    return "deleted"
+  } catch (error) {
+    return null;
+ }
 }
 async function createAdmin(firstName, lastName, email, password, userType) {
     const admin = new User(

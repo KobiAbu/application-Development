@@ -125,25 +125,32 @@
                 numOfOrdersCell.textContent = user.orders.length;
                 userTypeCell.textContent = user.userType;
 
-                // Create Update and Delete buttons
-                const updateButton = document.createElement('button');
-                updateButton.textContent = 'Update';
-                updateButton.classList.add('btn', 'btn-primary', 'btn-sm', 'me-2');
-                updateButton.addEventListener('click', () => {
-                    // Add your update logic here
-                    // You can use user.userID to identify the user to update
-                });
+                
 
                 const deleteButton = document.createElement('button');
                 deleteButton.textContent = 'Delete';
                 deleteButton.classList.add('btn', 'btn-danger', 'btn-sm');
                 deleteButton.addEventListener('click', () => {
-                    // Add your delete logic here
-                    // You can use user.userID to identify the user to delete
+                    $.ajax({
+                        type: "DELETE",
+                        url: `/admin/deleteUser/${user.userName}`,
+                        contentType: 'application/json',
+                        success: function (data) {
+                            console.log(data);
+                            console.log("deleted");
+                            const parentRow = deleteButton.closest('tr');
+                            if (parentRow) {
+                             parentRow.remove();
+                            }
+                        },
+                        error: function (error) {
+                            console.log(error);
+                        }
+                    });
                 });
 
                 // Append buttons to the actions cell
-                actionsCell.appendChild(updateButton);
+            
                 actionsCell.appendChild(deleteButton);
 
                 row.appendChild(userIdCell);
