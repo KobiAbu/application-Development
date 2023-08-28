@@ -7,8 +7,6 @@ $(document).ready(async function () {
         const cartTable = document.getElementById('cartTable');
         cartTable.innerHTML = '';
         const itemList = []
-
-        // Create an array to store the promises
         const promises = products.map(async product => {
             const url = `http://localhost:8082/getItemById/${product}`;
 
@@ -54,15 +52,7 @@ $(document).ready(async function () {
         let arr = [];
         let arr2 = [];
         let products = JSON.parse(localStorage.getItem('products'));
-        // products.forEach((product) => {
-        //     if (product == button.getAttribute('data-id')&&!flag) {
-        //         flag = true
-        //     }
-        //     else
-        //     {
-        //         arr.push(product)
-        //     }
-        // })
+
 
         arr = products.filter(product => product === button.getAttribute('data-id'));
         arr2 = products.filter(product => product !== button.getAttribute('data-id'));
@@ -92,11 +82,9 @@ $(document).ready(async function () {
         console.log(total)
         if (total > 0) {
 
-            //hard coded change it
-            const userName = '64ebba9d462e9deb48fee0e3'
-            const url = `http://localhost:8082/getUserById/${userName}`;
+
             $.ajax({
-                url: url,
+                url: '/getUserData',
                 success: function (response) {
                     $.ajax({
                         type: "POST",
@@ -111,7 +99,6 @@ $(document).ready(async function () {
                             const arr = [];
                             localStorage.setItem('products', JSON.stringify(arr));
                             localStorage.setItem('prdList', JSON.stringify(arr));
-
                             window.location.href = "./success.html";
                             console.log("hey")
                         }

@@ -36,20 +36,24 @@
                     <li class="nav-item"><a class="nav-link" href="#"></a></li>
                     <li class="nav-item"><a class="nav-link" href="products.html"
                             style="margin-left: -84px;">catalog</a></li>
-                    <li class="nav-item"><a class="nav-link" href="sign_up.html">sign up</a></li>
+                    <li class="nav-item"><a id="signUp" class="nav-link" href="sign_up.html">sign up</a></li>
 
-                    <li class="nav-item"><a class="nav-link" href="log_in.html">log in</a></li>
-                    <li class="nav-item"><a class="nav-link" href="" style="visibility: hidden">manager area</a></li>
-                    <li class="nav-item"><a class="nav-link" href="" style="visibility: hidden;" >log out</a></li>
+                    <li class="nav-item"><a id="log" class="nav-link" href="log_in.html">log in</a></li>
+                    <li class="nav-item"><a id="mngArea" class="nav-link" href="" style="visibility: hidden">manager
+                            area</a></li>
+                    <li class="nav-item"><a id="logOut" class="nav-link" href="" style="visibility: hidden">log out</a>
+                    </li>
 
                 </ul>
-                <a class="btn btn-primary ms-auto" role="button" href="userSet.html" >personal area</a>
+                <a id="prsArea" class="btn btn-primary ms-auto" role="button" href="userSet.html"
+                    style="visibility: hidden">personal
+                    area</a>
                 <a class="btn btn-primary ms-auto" role="button" href="/cart.html">cart</a>
             </div>
         </div>
     </nav>
     <div id="video">
-        <video autoplay muted loop  >
+        <video autoplay muted loop>
             <source src="assets/img/Bulgari Unexpected Wonders - a movie by Paolo Sorrentino.mp4" type="video/mp4">
         </video>
     </div>
@@ -127,10 +131,48 @@
 
     </nav>
     <script src="./assets/bootstrap/js/bootstrap.min.js"></script>
-
-    <!-- <script src="./assets/js/bs-init.js"></script>
-    <script src="./assets/js/Grid-and-List-view-V10-script.js"></script> -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            $(logOut).click(function (e) {
+                e.preventDefault()
+                $.ajax({
+                    url: "/logOut",
+                    success: function (response) {
+                        window.location.href = "index.html";
+                    }
+                });
+            })
+            // Function to extract a specific parameter's value from a query string
+            $.ajax({
+                type: "GET",
+                url: "/getUserType",
+                success: function (response) {
+
+                    if (response) {
+                        if (response === 'admin') {
+                            var mng = document.getElementById('mngArea')
+                            mng.style.visibility = 'visible'
+                        }
+                        if (response === 'user') {
+                            var persArea = document.getElementById('prsArea')
+                            persArea.style.visibility = 'visible'
+
+                        }
+                        var logIn = document.getElementById('log')
+                        var signUp = document.getElementById('signUp')
+                        var logOut = document.getElementById('logOut')
+                        logIn.style.visibility = 'hidden'
+                        signUp.style.visibility = 'hidden'
+                        logOut.style.visibility = 'visible'
+                    }
+
+                }
+            });
+
+        })
+    </script>
 
 </body>
 

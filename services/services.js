@@ -82,7 +82,7 @@ const getUser = async (name, password) => {
   }
 }
 
-const crateItem = async ( productName, price, stock, picture, gender, type) => {
+const crateItem = async (productName, price, stock, picture, gender, type) => {
   if (await checkIfExist(id)) {
     return null;
   }
@@ -108,10 +108,10 @@ const crateItem = async ( productName, price, stock, picture, gender, type) => {
 
 
 const getItemById = async (id) => {
-  
+
   try {
     const item = await items.findById(id);
-   // console.log(item)
+    // console.log(item)
     return item;
   } catch (error) {
     return null;
@@ -225,7 +225,6 @@ const getUserById = async (id) => {
   try {
     //console.log(name)
     const user = await users.findById(id);
-    console.log(user)
     return user;
   } catch (error) {
     return null;

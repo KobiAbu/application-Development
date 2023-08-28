@@ -16,30 +16,6 @@ const createUser = async (req, res) => {
         return res.status(404).json({ errors: ["cant create user"] })
 
 }
-const login = async (req, res) => {
-    const { userName, password } = req.body;
-    const user = await loginService.login(userName, password);
-    const userType = await UserService.getUser(userName, password);
-    const userid = userType._id
-    console.log(user)
-    if (user) {
-        // req.session.userName = userName;
-        sessionStorage.setItem('userName', userName);
-        req.session.userType = userType.userType;
-        req.session._id = userid;
-    if(user.userType=="admin")
-    {
-        res.json({success:true,userType:"admin"})
-        res.redirect('/admindashboard.html')
-    }
-    else{
-      res.json({success:true,userType:"user"})
-     res.redirect('/')
-    }
-    } else {
-       res.redirect('/login?error=1')
-    }
-}
 
 const createAdmin = async (req,res) => {
     const newAdmin = await UserService.createAdmin(req.body.email,req.body.password,"admin");
@@ -105,7 +81,6 @@ module.exports = {
     updateUser,
     deleteUser,
     createAdmin,
-    login,
     isloggedin,
     getUserById
 }

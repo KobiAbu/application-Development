@@ -18,20 +18,37 @@
 </head>
 
 <body>
+    <div class="collapse navbar-collapse" id="navcol-1">
+        <ul class="nav nav-tabs">
+            <li class="nav-item"><a class="nav-link" href="products.html">catalog</a></li>
+            <li class="nav-item"><a class="nav-link" href="sign_up.html">sign up</a><a class="nav-link"
+                    href="log_in.html">log in</a></li>
+        </ul>
+        <a class="btn btn-primary ms-auto" role="button" href="/cart.html">cart</a><a class="navbar-brand"
+            href="index.html">Gold street</a>
+    </div>
     <nav class="navbar navbar-expand-md navbar-light">
         <div class="container-fluid"><img src="assets/img/Letter-G-Jewelry-Logo%20(1).jpg" width="38" height="38"><a
                 class="navbar-brand" href="index.html">Gold street</a>
-            <div class="collapse navbar-collapse" id="navcol-1">
-                <ul class="navbar-nav">
-                    <li class="nav-item"></li>
-                    <li class="nav-item"></li>
-                    <li class="nav-item"><a class="nav-link" href="#"></a>
+            <div class="collapse navbar-collapse" id="navcol-2" style="margin-left: 17px;">
+                <ul class="navbar-nav" style="width: 432.125px;padding-right: 0px;">
+                    <li class="nav-item"><a class="nav-link" href="#"></a></li>
+                    <li class="nav-item"><a class="nav-link" href="products.html"
+                            style="margin-left: -84px;">catalog</a></li>
+                    <li class="nav-item"><a id="signUp" class="nav-link" href="sign_up.html">sign up</a></li>
+
+                    <li class="nav-item"><a id="log" class="nav-link" href="log_in.html">log in</a></li>
+                    <li class="nav-item"><a id="mngArea" class="nav-link" href="" style="visibility: hidden">manager
+                            area</a></li>
+                    <li class="nav-item"><a id="logOut" class="nav-link" href="" style="visibility: hidden">log out</a>
                     </li>
-                    <li class="nav-item"><a class="nav-link" href="products.html">catalog</a></li>
-                    <li class="nav-item"><a class="nav-link" href="sign_up.html">sign up</a></li>
+
                 </ul>
-            </div><a class="btn btn-primary ms-auto" role="button" href="cart.html">cart</a>
-        </div>
+                <a id="prsArea" class="btn btn-primary ms-auto" role="button" href="userSet.html"
+                    style="visibility: hidden">personal
+                    area</a>
+                <a class="btn btn-primary ms-auto" role="button" href="/cart.html">cart</a>
+            </div>
         </div>
     </nav>
     <div class="container">
@@ -49,13 +66,13 @@
                 <div class="col-md-6 col-xl-4">
                     <div class="card mb-5">
                         <div class="card-body d-flex flex-column align-items-center">
-                            <form class="text-center" method="post">
-                                <div class="mb-3"><input class="form-control" id="email" type="email" name="email"
+                            <form>
+                                <div class="mb-3"><input class="form-control" id="email" name="email"
                                         placeholder="Email" required></div>
                                 <div class="mb-3"><input class="form-control" id="password" type="password"
                                         name="password" placeholder="Password" required></div>
                                 <div class="mb-3"><button class="btn btn-primary d-block w-100"
-                                        type="submit">Login</button></div>
+                                        id="loginBT">Login</button></div>
                             </form>
                         </div>
                     </div>
@@ -69,33 +86,40 @@
     <script src="assets/js/bs-init.js"></script>
     <script src="assets/js/Grid-and-List-view-V10-script.js"></script>
     <script>
-        $("button").click(function (e) {
-            e.preventDefault();
-            const email = document.getElementById('email').value
-            const password = document.getElementById('password').value
-            $.ajax({
-                type: "GET",
-                url: "/getUser/" + password + "/" + email,
-                success: function (result) {
-                   
-                        if(result.userType==='admin')
-                        {
-                           
-                        }
-                        else if(result.userType==='user')
-                        {
-                            window.location.href = "./index.html";
-                        }
-                    
-                    
-                },
-                error: function (result) {
-                    document.getElementById('email').value = ''
-                    document.getElementById('password').value = ''
-                    alert('you entered wrong username or password');
-                }
+        $(document).ready(function () {
+            $(loginBT).click(function (e) {
+                e.preventDefault();
+                const email = document.getElementById('email').value
+                const password = document.getElementById('password').value
+                $.ajax({
+                    type: "GET",
+                    url: "getUser/" + password + "/" + email,
+                    success: function (result) {
+
+                        $.ajax({
+                            type: "POST",
+                            url: "/checkAdmin",
+                            data:
+                            {
+                                admin: result.userType,
+                                user: result
+                            },
+                            success: function (response) {
+                                window.location.href = "index.html";
+                            }
+                        });
+
+                    },
+                    error: function (result) {
+                        document.getElementById('email').value = ''
+                        document.getElementById('password').value = ''
+                        alert('you entered wrong username or password');
+                    }
+                });
             });
-        });
+        })
+
+
     </script>
 </body>
 
