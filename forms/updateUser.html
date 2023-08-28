@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>store </title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600&amp;display=swap">
+    <link rel="stylesheet" href="assets/css/animate.min.css">
+    <link rel="stylesheet" href="assets/css/Corporate-Footer-Clean.css">
+    <link rel="stylesheet" href="assets/css/Grid-and-List-view-V10-style.css">
+    <link rel="stylesheet" href="assets/css/Grid-and-List-view-V10.css">
+    <link rel="stylesheet" href="assets/css/Login-Form-Basic-icons.css">
+    <link rel="stylesheet" href="assets/css/Pretty-Footer-.css">
+    <link rel="stylesheet" href="assets/css/Sign-Up-Form---Gabriela-Carvalho.css">
+    <link rel="stylesheet" href="assets/css/styles-1.css">
+</head>
+
+<body>
+    <div class="collapse navbar-collapse" id="navcol-1">
+        <ul class="nav nav-tabs">
+            <li class="nav-item"><a class="nav-link" href="products.html">catalog</a></li>
+            <li class="nav-item"><a class="nav-link" href="sign_up.html">sign up</a><a class="nav-link"
+                    href="log_in.html">log in</a></li>
+        </ul>
+        <a class="btn btn-primary ms-auto" role="button" href="/cart.html">cart</a><a class="navbar-brand"
+            href="index.html">Gold street</a>
+    </div>
+    <nav class="navbar navbar-expand-md navbar-light">
+        <div class="container-fluid"><img src="assets/img/Letter-G-Jewelry-Logo%20(1).jpg" width="38" height="38"><a
+                class="navbar-brand" href="index.html">Gold street</a>
+            <div class="collapse navbar-collapse" id="navcol-2" style="margin-left: 17px;">
+                <ul class="navbar-nav" style="width: 432.125px;padding-right: 0px;">
+                    <li class="nav-item"><a class="nav-link" href="#"></a></li>
+                    <li class="nav-item"><a class="nav-link" href="products.html"
+                            style="margin-left: -84px;">catalog</a></li>
+                    <li class="nav-item"><a id="signUp" class="nav-link" href="sign_up.html">sign up</a></li>
+
+                    <li class="nav-item"><a id="log" class="nav-link" href="log_in.html">log in</a></li>
+                    <li class="nav-item"><a id="mngArea" class="nav-link" href="" style="visibility: hidden">manager
+                            area</a></li>
+                    <li class="nav-item"><a id="logOut" class="nav-link" href="" style="visibility: hidden">log out</a>
+                    </li>
+
+                </ul>
+                <a id="prsArea" class="btn btn-primary ms-auto" role="button" href="userSet.html"
+                    style="visibility: hidden">personal
+                    area</a>
+                <a class="btn btn-primary ms-auto" role="button" href="/cart.html">cart</a>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <h1></h1>
+    </div>
+    <section class="position-relative py-4 py-xl-5">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-md-8 col-xl-6 text-center mx-auto">
+                    <h2>Update Data</h2>
+
+                </div>
+            </div>
+            <div class="row d-flex justify-content-center">
+                <div class="col-md-6 col-xl-4">
+                    <div class="card mb-5">
+                        <div class="card-body d-flex flex-column align-items-center">
+                            <form>
+                                <div class="mb-3"><input class="form-control" id="email" name="email"
+                                        placeholder="Email" required></div>
+                                <div class="mb-3"><input class="form-control" id="password" type="password"
+                                        name="password" placeholder="Password" required></div>
+                                <div class="mb-3"><button class="btn btn-primary d-block w-100" id="loginBT">Update
+                                        Data</button></div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <p></p>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/bs-init.js"></script>
+    <script src="assets/js/Grid-and-List-view-V10-script.js"></script>
+    <script>
+        $(loginBT).click(function (e) {
+            e.preventDefault();
+            const newUser = document.getElementById('email').value
+            const newPass = document.getElementById('password').value
+            $.ajax({
+                url: "/getUserData",
+                success: function (response) {
+                    console.log(response)
+                    $.ajax({
+                        type: "POST",
+                        url: "/updateUserData",
+                        data: {
+                            current: response.userName,
+                            password: newPass,
+                            newUser: newUser
+                        },
+                        success: function () {
+                            alert("there has been a change in your account please login again")
+                            setTimeout(1000)
+                            $.ajax({
+                                url: "/logOut",
+                                success: function (response) {
+                                    window.location.href = "index.html"
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        });
+        $.ajax({
+            url: "/getUserData",
+            success: function (response) {
+                const emailField = document.getElementById('email')
+                const passField = document.getElementById('password')
+                emailField.value = response.userName
+                passField.value = response.password
+            }
+        });
+        $.ajax({
+            type: "GET",
+            url: "/getUserType",
+            success: function (response) {
+                if (response) {
+                    if (response === 'admin') {
+                        var mng = document.getElementById('mngArea')
+                        mng.style.visibility = 'visible'
+                    }
+                    if (response === 'user') {
+                        var persArea = document.getElementById('prsArea')
+                        persArea.style.visibility = 'visible'
+
+                    }
+                    var logIn = document.getElementById('log')
+                    var signUp = document.getElementById('signUp')
+                    var logOut = document.getElementById('logOut')
+                    logIn.style.visibility = 'hidden'
+                    signUp.style.visibility = 'hidden'
+                    logOut.style.visibility = 'visible'
+                }
+
+            }
+        });
+
+
+    </script>
+</body>
+
+</html>

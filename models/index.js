@@ -4,12 +4,12 @@ const schema = mongoose.Schema
 const orderScheme = new schema(
 
     {
-        
+
         totalAmount: {
             type: Number,
             required: true
         },
-       
+
         user: {
             type: mongoose.Schema.Types.ObjectId, ref: 'users'
         },
@@ -30,12 +30,12 @@ const userScheme = new schema(
             type: String,
             required: true
         },
-        userType:{
+        userType: {
             type: String,
             enum: ['admin', 'user'],
             default: 'user'
         },
-        
+
         orders: [{ type: mongoose.Schema.Types.Array, ref: 'orders' }]
         , adress:
         {
@@ -46,7 +46,7 @@ const userScheme = new schema(
     })
 
 const data = new schema({
-   
+
     productName:
     {
         type: String,

@@ -184,8 +184,8 @@ const createUser = async (userName, password) => {
 
 const getAllOrders = async () => {
   try {
-    const orders = await orders.find({});
-    return orders;
+    const order = await orders.find({});
+    return order;
   } catch (error) {
     return null;
   }

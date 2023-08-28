@@ -86,6 +86,8 @@ $(document).ready(async function () {
             $.ajax({
                 url: '/getUserData',
                 success: function (response) {
+                    const userName = response.userName
+                    const password = response.password
                     $.ajax({
                         type: "POST",
                         url: "/createOrder",
@@ -95,12 +97,40 @@ $(document).ready(async function () {
                             items: items,
                             totalAmount: total
                         },
-                        success: function (response) {
+                        success: function (res) {
                             const arr = [];
                             localStorage.setItem('products', JSON.stringify(arr));
                             localStorage.setItem('prdList', JSON.stringify(arr));
-                            window.location.href = "./success.html";
-                            console.log("hey")
+                            $.ajax({
+                                url: "/kill",
+                                success: function () {
+                                    console.log('token killed')
+                                    $.ajax({
+                                        url: "/getUser/" + password + "/" + userName,
+                                        success: async function (feedback) {
+                                            console.log(await feedback.user)
+                                            $.ajax({
+                                                type: "POST",
+                                                url: "/checkAdmin",
+                                                data: {
+                                                    user: feedback
+                                                    , admin: feedback.admin
+                                                }
+                                                ,
+                                                success: function (response) {
+                                                    window.location.href = "./success.html";
+                                                }
+                                            });
+
+                                        }
+                                    });
+                                }
+                            });
+
+                        },
+                        error: function () {
+                            window.location.href = "./log_in.html"
+                            alert("you need to be signed in")
                         }
                     });
                 }, error: function (xhr, textStatus, errorThrown) {

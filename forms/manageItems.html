@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Personal Area</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600&amp;display=swap">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body id="gridContainer">
+    <div class="collapse navbar-collapse" id="navcol-1">
+        <ul class="nav nav-tabs">
+            <li class="nav-item"><a class="nav-link" href="products.html">catalog</a></li>
+            <li class="nav-item"><a class="nav-link" href="sign_up.html">sign up</a><a class="nav-link"
+                    href="log_in.html">log in</a></li>
+        </ul>
+        <a class="btn btn-primary ms-auto" role="button" href="/cart.html">cart</a><a class="navbar-brand"
+            href="index.html">Gold street</a>
+    </div>
+    <nav class="navbar navbar-expand-md navbar-light">
+        <div class="container-fluid"><img src="assets/img/Letter-G-Jewelry-Logo%20(1).jpg" width="38" height="38"><a
+                class="navbar-brand" href="index.html">Gold street</a>
+            <div class="collapse navbar-collapse" id="navcol-2" style="margin-left: 17px;">
+                <ul class="navbar-nav" style="width: 432.125px;padding-right: 0px;">
+                    <li class="nav-item"><a class="nav-link" href="#"></a></li>
+                    <li class="nav-item"><a class="nav-link" href="products.html"
+                            style="margin-left: -84px;">catalog</a></li>
+                    <li class="nav-item"><a id="signUp" class="nav-link" href="sign_up.html">sign up</a></li>
+
+                    <li class="nav-item"><a id="log" class="nav-link" href="log_in.html">log in</a></li>
+                    <li class="nav-item"><a id="mngArea" class="nav-link" href="managerArea.html"
+                            style="visibility: hidden">manager
+                            area</a></li>
+                    <li class="nav-item"><a id="logOut" class="nav-link" href="" style="visibility: hidden">log out</a>
+                    </li>
+
+                </ul>
+                <a id="prsArea" class="btn btn-primary ms-auto" role="button" href="userSet.html"
+                    style="visibility: hidden">personal
+                    area</a>
+                <a class="btn btn-primary ms-auto" role="button" href="/cart.html">cart</a>
+            </div>
+        </div>
+    </nav>
+
+    <br></br>
+
+    <div class="container text-center mt-4">
+        <h2>items</h2>
+        <div class="mb-3">
+            <label for="searchInput" class="form-label">Search by Name:</label>
+            <input type="text" class="form-control" id="searchInput" placeholder="Enter item name">
+        </div>
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>price</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="itemTableBody">
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', function () {
+            const searchTerm = searchInput.value.trim().toLowerCase();
+            const rows = itemTableBody.getElementsByTagName('tr');
+
+            for (let row of rows) {
+                const nameCell = row.getElementsByTagName('td')[0];
+                const itemName = nameCell.textContent.toLowerCase();
+                if (itemName.includes(searchTerm)) {
+                    row.style.display = 'table-row';
+                } else {
+                    row.style.display = 'none';
+                }
+            }
+        });
+        async function getAllItems() {
+            const url = 'http://localhost:8082/getItems'
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    type: "GET",
+                    url,
+                    contentType: 'application/json',
+                    success: function (data) {
+                        resolve(data);
+                    },
+                    error: function (error) {
+                        reject(error);
+                    }
+                });
+            });
+        }
+        $(document).ready(async function () {
+            let list = await getAllItems()
+            console.log(list);
+            const itemTableBody = document.getElementById('itemTableBody');
+
+            // Clear any existing rows
+            itemTableBody.innerHTML = '';
+
+            // Loop through the list of items and create rows for them
+            list.forEach(item => {
+                const row = document.createElement('tr');
+                const nameCell = document.createElement('td');
+                const priceCell = document.createElement('td');
+                const actionsCell = document.createElement('td');
+
+                nameCell.textContent = item.productName;
+                priceCell.textContent = item.price;
+
+                const updateButton = document.createElement('button');
+                updateButton.textContent = 'Update';
+                updateButton.classList.add('btn', 'btn-primary', 'mr-2');
+                updateButton.addEventListener('click', () => {
+                    // Handle update action here
+                    console.log('Update button clicked for item:', item);
+                });
+
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.classList.add('btn', 'btn-danger');
+                deleteButton.addEventListener('click', () => {
+                    // Handle delete action here
+                    console.log('Delete button clicked for item:', item);
+                });
+
+                actionsCell.appendChild(updateButton);
+                actionsCell.appendChild(deleteButton);
+
+                row.appendChild(nameCell);
+                row.appendChild(priceCell);
+                row.appendChild(actionsCell);
+
+                itemTableBody.appendChild(row);
+            });
+            $(logOut).click(async function (e) {
+                e.preventDefault()
+
+                $.ajax({
+                    url: "/logOut",
+                    success: function (response) {
+                        window.location.href = "index.html";
+                    }
+                });
+            })
+            var logIn = document.getElementById('log')
+            var signUp = document.getElementById('signUp')
+            var logOut = document.getElementById('logOut')
+            logIn.style.visibility = 'hidden'
+            signUp.style.visibility = 'hidden'
+            logOut.style.visibility = 'visible'
+            var mngArea = document.getElementById('mngArea')
+            mngArea.style.visibility = 'visible'
+        })
+    </script>
+    <script src="./assets/bootstrap/js/bootstrap.min.js"></script>
+</body>
+
+</html>

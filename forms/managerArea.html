@@ -4,11 +4,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Gold Street</title>
+    <title>Personal Area</title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/css/styles.min.css">
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600&amp;display=swap">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body id="gridContainer">
@@ -32,7 +31,8 @@
                     <li class="nav-item"><a id="signUp" class="nav-link" href="sign_up.html">sign up</a></li>
 
                     <li class="nav-item"><a id="log" class="nav-link" href="log_in.html">log in</a></li>
-                    <li class="nav-item"><a id="mngArea" class="nav-link" href="managerArea.html" style="visibility: hidden">manager
+                    <li class="nav-item"><a id="mngArea" class="nav-link" href="managerArea.html"
+                            style="visibility: hidden">manager
                             area</a></li>
                     <li class="nav-item"><a id="logOut" class="nav-link" href="" style="visibility: hidden">log out</a>
                     </li>
@@ -45,37 +45,23 @@
             </div>
         </div>
     </nav>
-    <h1 style="text-align: center;"><strong>Products</strong></h1>
-    <select name="price-range" id="price-range">
-        <option value="">Price</option>
-        <option value="500">500</option>
-        <option value="1000">1000</option>
-        <option value="1500">1500</option>
-        <option value="2000">2000</option>
-        <option value="2500">2500</option>
-    </select>
-    <select name="type" id="type">
-        <option value="">Type</option>
-        <option value="earings">Earings</option>
-        <option value="bracelet">Bracelet</option>
-        <option value="necklace">Necklace</option>
-        <option value="ring">Ring</option>
-    </select>
-    <select name="gender" id="gender">
-        <option value="">Gender</option>
-        <option value="male">Male</option>
-        <option value="female">Female</option>
-    </select>
-    <div class="container py-4 py-xl-5" id="container">
-
+    <div class="container text-center mt-4">
+        <h2 id="personalName">Welcome to Your Manager Area</h2>
     </div>
+    <div class="container text-center mt-4">
+        <a href="manageUsers.html" class="btn btn-primary btn-lg">Manage Users </a>
+    </div>
+    <div class="container text-center mt-4">
+        <a href="manageItems.html" class="btn btn-primary btn-lg">Manage Item </a>
+    </div>
+    <div class="container text-center mt-4">
+        <a href="manageOrders.html" class="btn btn-primary btn-lg">Manage Orders</a>
+    </div>
+    <br></br>
 
-    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-    <script src="assets/js/script.min.js"></script>
-    <script type="module" src="assets/js/products.js"></script>
 
     <script>
-         $(document).ready(function () {
+        $(document).ready(function () {
             $(logOut).click(function (e) {
                 e.preventDefault()
                 $.ajax({
@@ -83,35 +69,20 @@
                     success: function (response) {
                         window.location.href = "index.html";
                     }
-                })
                 });
-        $.ajax({
-            type: "GET",
-            url: "/getUserType",
-            success: function (response) {
-
-                if (response) {
-                    if (response === 'admin') {
-                        var mng = document.getElementById('mngArea')
-                        mng.style.visibility = 'visible'
-                    }
-                    if (response === 'user') {
-                        var persArea = document.getElementById('prsArea')
-                        persArea.style.visibility = 'visible'
-
-                    }
-                    var logIn = document.getElementById('log')
-                    var signUp = document.getElementById('signUp')
-                    var logOut = document.getElementById('logOut')
-                    logIn.style.visibility = 'hidden'
-                    signUp.style.visibility = 'hidden'
-                    logOut.style.visibility = 'visible'
-                }
-
-            }
-        });
-    });
+            })
+            var logIn = document.getElementById('log')
+            var signUp = document.getElementById('signUp')
+            var logOut = document.getElementById('logOut')
+            logIn.style.visibility = 'hidden'
+            signUp.style.visibility = 'hidden'
+            logOut.style.visibility = 'visible'
+            var mngArea = document.getElementById('mngArea')
+            mngArea.style.visibility = 'visible'
+        })
     </script>
+    <script src="./assets/js/handlers/renderOrders.js"></script>
+    <script src="./assets/bootstrap/js/bootstrap.min.js"></script>
 </body>
 
 </html>

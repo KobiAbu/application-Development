@@ -46,20 +46,37 @@ router.get('/logOut', (req, res) => {
     req.session = null
     res.sendFile(appDir + '/forms/index.html')
 });
-
+router.get('/kill', (req, res) => {
+    req.session = null
+    res.status(201).send("great")
+});
 
 router.post('/admin/update', ensureAdmin, dataController.updateData)
 router.get('/admin/update/:id', ensureAdmin, dataController.updateData)
 router.post('/createUser', loginController.createUser)
 router.post('/admin/addAnItem', ensureAdmin, dataController.createItem)
 router.get('/user/username', loginController.getUserById)
+router.get('/getAllOrders', dataController.getAllOrders)
+//router.post()
 
 
 router.get('/getItems', dataController.getItems)
+router.get('/getAllUsers',loginController.getUsers)
 router.get('/getUser/:password/:email', loginController.getUser)
 router.get('/getUserById/:id', loginController.getUserById)
 router.get('/getItemById/:id', dataController.getItemById);
 router.post('/checkAdmin', (req, res) => {
+    if (req.body.admin === 'admin') {
+        req.session.userType = "admin"
+    }
+    else {
+        req.session.userType = 'user'
+    }
+    req.session.user = req.body.user
+    res.send(req.session)
+
+})
+router.post('/createToken', (req, res) => {
     if (req.body.admin === 'admin') {
         req.session.userType = "admin"
     }
@@ -86,10 +103,10 @@ router.get('/getEmailandPass', (req, res) => {
 })
 router.post('/createOrder', dataController.createOrder)
 router.get('/getUserData', (req, res) => {
+
     res.send(req.session.user)
 })
-
-
+router.post('/updateUserData', loginController.updateUser)
 router.post('/search', dataController.searchByParams)
 
 

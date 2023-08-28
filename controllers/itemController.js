@@ -86,10 +86,14 @@ const searchByParams = async (req, res) => {
         return res.status(404).json({ errors: ["item not found"] })
 }
 
-
+const getAllOrders = async (req,res)=>{
+   const list =  await dataService.getAllOrders()
+   return res.json(list)
+}
 
 
 module.exports = {
+    getAllOrders,
     createItem,
     getItems,
     getItemById,

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Personal Area</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600&amp;display=swap">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body id="gridContainer">
+    <div class="collapse navbar-collapse" id="navcol-1">
+        <ul class="nav nav-tabs">
+            <li class="nav-item"><a class="nav-link" href="products.html">catalog</a></li>
+            <li class="nav-item"><a class="nav-link" href="sign_up.html">sign up</a><a class="nav-link"
+                    href="log_in.html">log in</a></li>
+        </ul>
+        <a class="btn btn-primary ms-auto" role="button" href="/cart.html">cart</a><a class="navbar-brand"
+            href="index.html">Gold street</a>
+    </div>
+    <nav class="navbar navbar-expand-md navbar-light">
+        <div class="container-fluid"><img src="assets/img/Letter-G-Jewelry-Logo%20(1).jpg" width="38" height="38"><a
+                class="navbar-brand" href="index.html">Gold street</a>
+            <div class="collapse navbar-collapse" id="navcol-2" style="margin-left: 17px;">
+                <ul class="navbar-nav" style="width: 432.125px;padding-right: 0px;">
+                    <li class="nav-item"><a class="nav-link" href="#"></a></li>
+                    <li class="nav-item"><a class="nav-link" href="products.html"
+                            style="margin-left: -84px;">catalog</a></li>
+                    <li class="nav-item"><a id="signUp" class="nav-link" href="sign_up.html">sign up</a></li>
+
+                    <li class="nav-item"><a id="log" class="nav-link" href="log_in.html">log in</a></li>
+                    <li class="nav-item"><a id="mngArea" class="nav-link" href="managerArea.html"
+                            style="visibility: hidden">manager
+                            area</a></li>
+                    <li class="nav-item"><a id="logOut" class="nav-link" href="" style="visibility: hidden">log out</a>
+                    </li>
+
+                </ul>
+                <a id="prsArea" class="btn btn-primary ms-auto" role="button" href="userSet.html"
+                    style="visibility: hidden">personal
+                    area</a>
+                <a class="btn btn-primary ms-auto" role="button" href="/cart.html">cart</a>
+            </div>
+        </div>
+    </nav>
+
+    <br></br>
+
+    <div class="container text-center mt-4">
+        <h2>Users</h2>
+        <div class="mb-3">
+            <label for="searchInput" class="form-label">Search by User ID:</label>
+            <input type="text" class="form-control" id="searchInput" placeholder="Enter user ID">
+        </div>
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>User ID</th>
+                        <th>Password</th>
+                        <th>Number of Orders</th>
+                        <th>userType</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="userTableBody">
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', function () {
+            const searchTerm = searchInput.value.trim().toLowerCase();
+            const rows = userTableBody.getElementsByTagName('tr');
+
+            for (let row of rows) {
+                const userIdCell = row.getElementsByTagName('td')[0];
+                const userId = userIdCell.textContent.toLowerCase();
+                if (userId.includes(searchTerm)) {
+                    row.style.display = 'table-row';
+                } else {
+                    row.style.display = 'none';
+                }
+            }
+        });
+        async function getAllUsers() {
+            const url = '/getAllUsers'
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    type: "GET",
+                    url,
+                    contentType: 'application/json',
+                    success: function (data) {
+                        resolve(data);
+                    },
+                    error: function (error) {
+                        reject(error);
+                    }
+                });
+            });
+        }
+        $(document).ready(async function () {
+            let users = await getAllUsers();
+
+            const userTableBody = document.getElementById('userTableBody');
+
+            // Clear any existing rows
+            userTableBody.innerHTML = '';
+
+            // Loop through the list of users and create rows for them
+            users.forEach(user => {
+                const row = document.createElement('tr');
+                const userIdCell = document.createElement('td');
+                const passwordCell = document.createElement('td');
+                const numOfOrdersCell = document.createElement('td');
+                const userTypeCell = document.createElement('td');
+                const actionsCell = document.createElement('td');
+
+                userIdCell.textContent = user.userName;
+                passwordCell.textContent = user.password;
+                numOfOrdersCell.textContent = user.orders.length;
+                userTypeCell.textContent = user.userType;
+
+                // Create Update and Delete buttons
+                const updateButton = document.createElement('button');
+                updateButton.textContent = 'Update';
+                updateButton.classList.add('btn', 'btn-primary', 'btn-sm', 'me-2');
+                updateButton.addEventListener('click', () => {
+                    // Add your update logic here
+                    // You can use user.userID to identify the user to update
+                });
+
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.classList.add('btn', 'btn-danger', 'btn-sm');
+                deleteButton.addEventListener('click', () => {
+                    // Add your delete logic here
+                    // You can use user.userID to identify the user to delete
+                });
+
+                // Append buttons to the actions cell
+                actionsCell.appendChild(updateButton);
+                actionsCell.appendChild(deleteButton);
+
+                row.appendChild(userIdCell);
+                row.appendChild(passwordCell);
+                row.appendChild(numOfOrdersCell);
+                row.appendChild(userTypeCell);
+                row.appendChild(actionsCell);
+
+                userTableBody.appendChild(row);
+            });
+            $(logOut).click(function (e) {
+                e.preventDefault()
+                $.ajax({
+                    url: "/logOut",
+                    success: function (response) {
+                        window.location.href = "index.html";
+                    }
+                });
+            })
+            var logIn = document.getElementById('log')
+            var signUp = document.getElementById('signUp')
+            var logOut = document.getElementById('logOut')
+            logIn.style.visibility = 'hidden'
+            signUp.style.visibility = 'hidden'
+            logOut.style.visibility = 'visible'
+            var mngArea = document.getElementById('mngArea')
+            mngArea.style.visibility = 'visible'
+        })
+    </script>
+    <script src="./assets/bootstrap/js/bootstrap.min.js"></script>
+</body>
+
+</html>

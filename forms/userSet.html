@@ -31,7 +31,8 @@
                     <li class="nav-item"><a id="signUp" class="nav-link" href="sign_up.html">sign up</a></li>
 
                     <li class="nav-item"><a id="log" class="nav-link" href="log_in.html">log in</a></li>
-                    <li class="nav-item"><a id="mngArea" class="nav-link" href="" style="visibility: hidden">manager
+                    <li class="nav-item"><a id="mngArea" class="nav-link" href="/managerArea.html"
+                            style="visibility: hidden">manager
                             area</a></li>
                     <li class="nav-item"><a id="logOut" class="nav-link" href="" style="visibility: hidden">log out</a>
                     </li>
@@ -45,22 +46,32 @@
         </div>
     </nav>
     <div class="container text-center mt-4">
-        <h2>Welcome to Your Personal Area</h2>
-        <div class="card mx-auto" style="max-width: 400px;">
-            <div class="card-body">
-                <h5 class="card-title">Your Profile</h5>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item" id="userName"><strong>Name:</strong> </li>
-                    <li class="list-group-item" id="userEmail"><strong>Email:</strong> </li>
-                    <li class="list-group-item" id="userAddress"><strong>Address:</strong> </li>
-                </ul>
-            </div>
-        </div>
-        <div class="mt-3">
-            <a href="user_orders.html" class="btn btn-primary">View My Orders</a>
+        <h2 id="personalName">Welcome to Your Personal Area</h2>
+    </div>
+    <div class="container text-center mt-4">
+        <a href="updateUser.html" class="btn btn-primary btn-lg">edit personal data</a>
+    </div>
+    <br></br>
+
+    <div class="container text-center mt-4">
+        <h2>My Orders</h2>
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Number Of Products</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
         </div>
     </div>
     <script>
+
         $(document).ready(function () {
             $(logOut).click(function (e) {
                 e.preventDefault()
@@ -70,7 +81,7 @@
                         window.location.href = "index.html";
                     }
                 })
-                });
+            });
             $.ajax({
                 type: "GET",
                 url: "/getUserType",
@@ -110,6 +121,7 @@
             })
         });
     </script>
+    <script src="./assets/js/handlers/renderOrders.js"></script>
     <script src="./assets/bootstrap/js/bootstrap.min.js"></script>
 </body>
 
