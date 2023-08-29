@@ -1,4 +1,33 @@
+const { items } = require("../models");
 const dataService = require("../services/services");
+
+const getSpecificOrder = async (req, res) => {
+
+  //console.log(req.body); // Use req.body instead of data
+
+  let list = [];
+  if (req.body.amount) {
+    list.push(["amount", req.body.amount]);
+  }
+  if (req.body.date) {
+    list.push(["date", req.body.date]);
+  }
+  if (req.body.items) {
+    list.push(["items", req.body.items]);
+  }
+  const c = await dataService.getSpecificOrder(list);
+  const list2 = [];
+  c.forEach((element) => {
+    list2.push(element);
+  });
+
+  if (c) {
+    res.json(c);
+  } else {
+    return res.status(404).json({ errors: ["item not found"] });
+  }
+};
+
 const getItems = async (req, res) => {
   const newItem = await dataService.getAllItems();
   return res.json(newItem);
@@ -126,6 +155,7 @@ const deleteOrder = async (req, res) => {
 };
 
 module.exports = {
+  getSpecificOrder,
   makeAdmin,
   deleteOrder,
   getItemsList,

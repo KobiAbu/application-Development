@@ -21,15 +21,18 @@
         body {
             font-family: 'Nunito Sans', sans-serif;
         }
+
         #gridContainer {
             padding: 20px;
         }
+
         .chart-container {
             margin: 20px 0;
             padding: 20px;
             border: 1px solid #ddd;
             border-radius: 8px;
         }
+
         .table-container {
             margin-top: 20px;
         }
@@ -57,7 +60,8 @@
                     <li class="nav-item"><a id="signUp" class="nav-link" href="sign_up.html">sign up</a></li>
 
                     <li class="nav-item"><a id="log" class="nav-link" href="log_in.html">log in</a></li>
-                    <li class="nav-item"><a id="mngArea" class="nav-link" href="managerArea.html" style="visibility: hidden">manager
+                    <li class="nav-item"><a id="mngArea" class="nav-link" href="managerArea.html"
+                            style="visibility: hidden">manager
                             area</a></li>
                     <li class="nav-item"><a id="logOut" class="nav-link" href="" style="visibility: hidden">log out</a>
                     </li>
@@ -66,7 +70,7 @@
                 <a id="prsArea" class="btn btn-primary ms-auto" role="button" href="userSet.html"
                     style="visibility: hidden">personal
                     area</a>
-                <a class="btn btn-primary ms-auto" role="button" href="/cart.html">cart</a>
+                <a id='cart' class="btn btn-primary ms-auto" role="button" href="/cart.html">cart</a>
             </div>
         </div>
     </nav>
@@ -74,12 +78,10 @@
         <h2>Total orders per month</h2>
         <div class="chart-container" id="orderDistributionChart"></div>
     </div>
-    </div> <!-- Close the first row div -->
-    </div> <!-- Close the container div -->
-    
-    <!-- Add some space between the two graph divs -->
+    </div>
+    </div>
     <div style="margin-top: 40px;"></div>
-    
+
     <div class="container text-center">
         <div class="row">
             <div class="col-md-6 mx-auto text-center">
@@ -88,12 +90,11 @@
             </div>
         </div>
     </div>
-    
 
-    
+
+
 
     <footer>
-        <!-- Footer content -->
     </footer>
 
     <script src="./assets/bootstrap/js/bootstrap.min.js"></script>
@@ -116,7 +117,6 @@
                     }
                 });
             })
-            // Function to extract a specific parameter's value from a query string
             $.ajax({
                 type: "GET",
                 url: "/getUserType",
@@ -126,6 +126,8 @@
                         if (response === 'admin') {
                             var mng = document.getElementById('mngArea')
                             mng.style.visibility = 'visible'
+                            document.getElementById('cart').style.visibility = 'hidden'
+
                         }
                         if (response === 'user') {
                             var persArea = document.getElementById('prsArea')
@@ -162,7 +164,7 @@
                     const userData = await response.json();
                     // console.log(userData);
                     return userData;
-                    
+
                 } catch (error) {
                     console.error('Error fetching user data:', error);
                     return [];
@@ -207,7 +209,7 @@
                 .attr("class", "x-axis")
                 .attr("transform", `translate(0,${height})`)
                 .call(d3.axisBottom(x).tickValues(userAveragePrices.map(entry => entry.user)));
-                
+
 
             svg.append("g")
                 .attr("class", "y-axis")
@@ -222,88 +224,88 @@
                 .attr("y", d => y(d.averagePrice))
                 .attr("height", d => height - y(d.averagePrice));
 
-        // Process order data and create a map of months to counts
-        const monthNames = {
-    "01": "January",
-    "02": "February",
-    "03": "March",
-    "04": "April",
-    "05": "May",
-    "06": "June",
-    "07": "July",
-    "08": "August",
-    "09": "September",
-    "10": "October",
-    "11": "November",
-    "12": "December"
-};
+            // Process order data and create a map of months to counts
+            const monthNames = {
+                "01": "January",
+                "02": "February",
+                "03": "March",
+                "04": "April",
+                "05": "May",
+                "06": "June",
+                "07": "July",
+                "08": "August",
+                "09": "September",
+                "10": "October",
+                "11": "November",
+                "12": "December"
+            };
 
-        const orderCountPerMonth = new Map();
-        orderData.forEach(order => {
-            const orderDate = order.addedDate;
-            var month = orderDate.split('-')[1];
-            console.log(month);
-            const count = orderCountPerMonth.get(month) || 0;
-            orderCountPerMonth.set(month, count + 1);
+            const orderCountPerMonth = new Map();
+            orderData.forEach(order => {
+                const orderDate = order.addedDate;
+                var month = orderDate.split('-')[1];
+                console.log(month);
+                const count = orderCountPerMonth.get(month) || 0;
+                orderCountPerMonth.set(month, count + 1);
+            });
+
+            // Convert the map into an array of objects
+            const orderCountPerMonthArray = Array.from(orderCountPerMonth, ([month, count]) => ({
+                month: monthNames[month],
+                count
+            }));
+
+            // Create a pie chart
+            const radius = Math.min(width, height) / 2;
+            const pie = d3.pie().value(d => d.count);
+            const arc = d3.arc().innerRadius(0).outerRadius(radius);
+
+            const color = d3.scaleOrdinal(d3.schemeCategory10);
+
+            const pieSvg = d3.select("#orderDistributionChart") // Make sure this matches the ID in your HTML
+                .append("svg")
+                .attr("width", width + margin.left + margin.right) // Make the width larger
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform", `translate(${width / 2},${height / 2})`);
+
+            const arcs = pieSvg.selectAll("arc")
+                .data(pie(orderCountPerMonthArray))
+                .enter()
+                .append("g")
+                .attr("class", "arc");
+
+            arcs.append("path")
+                .attr("d", arc)
+                .attr("fill", (d, i) => color(i)); // Use different colors for each month
+
+            arcs.append("text")
+                .attr("transform", d => `translate(${arc.centroid(d)})`)
+                .attr("dy", "0.35em")
+                .text(d => d.data.count);
+            // Add legend
+            const legend = pieSvg.selectAll(".legend")
+                .data(orderCountPerMonthArray)
+                .enter().append("g")
+                .attr("class", "legend")
+                .attr("transform", (d, i) => `translate(0,${(i - orderCountPerMonthArray.length / 2 + 1) * 30})`);
+
+            legend.append("rect")
+                .attr("x", radius + 10)
+                .attr("width", 18)
+                .attr("height", 18)
+                .attr("fill", (d, i) => color(i));
+
+            legend.append("text")
+                .attr("x", radius + 40)
+                .attr("y", 9)
+                .attr("dy", ".35em")
+                .style("text-anchor", "start")
+                .text((d, i) => ` ${d.month}: ${d.count}`);
+
         });
 
-        // Convert the map into an array of objects
-        const orderCountPerMonthArray = Array.from(orderCountPerMonth, ([month, count]) => ({
-    month: monthNames[month],
-    count
-}));
 
-        // Create a pie chart
-        const radius = Math.min(width, height) / 2;
-const pie = d3.pie().value(d => d.count);
-const arc = d3.arc().innerRadius(0).outerRadius(radius);
-
-const color = d3.scaleOrdinal(d3.schemeCategory10);
-
-const pieSvg = d3.select("#orderDistributionChart") // Make sure this matches the ID in your HTML
-    .append("svg")
-    .attr("width", width + margin.left + margin.right) // Make the width larger
-    .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-    .attr("transform", `translate(${width / 2},${height / 2})`);
-
-const arcs = pieSvg.selectAll("arc")
-    .data(pie(orderCountPerMonthArray))
-    .enter()
-    .append("g")
-    .attr("class", "arc");
-
-        arcs.append("path")
-            .attr("d", arc)
-            .attr("fill", (d, i) => color(i)); // Use different colors for each month
-
-        arcs.append("text")
-            .attr("transform", d => `translate(${arc.centroid(d)})`)
-            .attr("dy", "0.35em")
-            .text(d => d.data.count);
-        // Add legend
-        const legend = pieSvg.selectAll(".legend")
-            .data(orderCountPerMonthArray)
-            .enter().append("g")
-            .attr("class", "legend")
-            .attr("transform", (d, i) => `translate(0,${(i - orderCountPerMonthArray.length / 2 + 1) * 30})`);
-
-        legend.append("rect")
-            .attr("x", radius + 10)
-            .attr("width", 18)
-            .attr("height", 18)
-            .attr("fill", (d, i) => color(i));
-
-        legend.append("text")
-            .attr("x", radius + 40)
-            .attr("y", 9)
-            .attr("dy", ".35em")
-            .style("text-anchor", "start")
-            .text((d, i) => ` ${d.month}: ${d.count}`);
-
-                });
-          
-        
     </script>
 </body>
 

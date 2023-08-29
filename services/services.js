@@ -1,6 +1,83 @@
 const { get } = require("mongoose");
 const { orders, items, users } = require("../models/index");
 
+async function getSpecificOrder(list) {
+  const groupByFields = {};
+  list.forEach((query) => {
+    if (query[0] === "date") {
+      groupByFields.date = parseInt(query[1]);
+    }
+
+    if (query[0] === "amount") {
+      groupByFields.totalAmount = {
+        $gte: 0,
+        $lte: parseInt(query[1]),
+      };
+    }
+
+    if (query[0] === "items") {
+      groupByFields.itemsCount = { $lte: parseInt(query[1]) };
+    }
+  });
+
+  try {
+    const pipeline = [];
+
+    const matchStage = {};
+    for (const key in groupByFields) {
+      if (key === 'itemsCount') {
+        const conditionOperator = Object.keys(groupByFields[key])[0];
+        const conditionValue = groupByFields[key][conditionOperator];
+        matchStage['$expr'] = {
+          [conditionOperator]: [{ $size: '$items' }, conditionValue]
+        };
+      } else if (key === 'date') {
+        const dateValue = groupByFields[key];
+        const today = new Date();
+        const currentMonth = today.getMonth() + 1;
+        const minMonth = currentMonth - dateValue >= 1 ? currentMonth - dateValue : 1;
+        matchStage['$expr'] = {
+          $and: [
+            { $gte: [{ $month: { $dateFromString: { dateString: '$addedDate' } } }, minMonth] },
+            { $lte: [{ $month: { $dateFromString: { dateString: '$addedDate' } } }, currentMonth] }
+          ]
+        };
+      } else {
+        matchStage[key] = groupByFields[key];
+      }
+    }
+    pipeline.push({ $match: matchStage });
+
+    const groupStage = {
+      _id: {},
+      orders: { $push: '$$ROOT' },
+    };
+    for (const key in groupByFields) {
+      groupStage._id[key] = `$${key}`;
+    }
+
+    pipeline.push({ $group: groupStage });
+    const result = await orders.aggregate(pipeline);
+    let orderList = [];
+    result.forEach((group) => {
+      const { _id, orders } = group;
+      orders.forEach((order) => {
+        orderList.push(order);
+      });
+    });
+    return orderList;
+  } catch (error) {
+    throw error;
+  }
+}
+
+
+
+
+
+
+
+
 const getItemsList = async (list) => {
   let itemsList = await Promise.all(
     list.map(async (element) => {
@@ -287,6 +364,7 @@ const createOrder = async (totalAmount, user, items, date) => {
 };
 
 module.exports = {
+  getSpecificOrder,
   makeAdmin,
   getItemsList,
   getAllItems,

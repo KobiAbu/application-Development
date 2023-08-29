@@ -38,7 +38,7 @@
                 <a id="prsArea" class="btn btn-primary ms-auto" role="button" href="userSet.html"
                     style="visibility: hidden">personal
                     area</a>
-                <a class="btn btn-primary ms-auto" role="button" href="/cart.html">cart</a>
+                <a id="cart" class="btn btn-primary ms-auto" role="button" href="/cart.html">cart</a>
             </div>
         </div>
     </nav>
@@ -114,6 +114,8 @@
                         if (response === 'admin') {
                             var mng = document.getElementById('mngArea')
                             mng.style.visibility = 'visible'
+                            document.getElementById('cart').style.visibility = 'hidden'
+                        
                         }
                         if (response === 'user') {
                             var persArea = document.getElementById('prsArea')
