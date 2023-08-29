@@ -103,7 +103,34 @@
                 });
             });
         }
+        
         $(document).ready(async function () {
+            // Function to extract a specific parameter's value from a query string
+            $.ajax({
+                type: "GET",
+                url: "/getUserType",
+                success: function (response) {
+
+                    if (response) {
+                        if (response === 'admin') {
+                            var mng = document.getElementById('mngArea')
+                            mng.style.visibility = 'visible'
+                        }
+                        if (response === 'user') {
+                            var persArea = document.getElementById('prsArea')
+                            persArea.style.visibility = 'visible'
+
+                        }
+                        var logIn = document.getElementById('log')
+                        var signUp = document.getElementById('signUp')
+                        var logOut = document.getElementById('logOut')
+                        logIn.style.visibility = 'hidden'
+                        signUp.style.visibility = 'hidden'
+                        logOut.style.visibility = 'visible'
+                    }
+
+                }
+            });
             let users = await getAllUsers();
 
             const userTableBody = document.getElementById('userTableBody');
@@ -161,6 +188,7 @@
 
                 userTableBody.appendChild(row);
             });
+            
             $(logOut).click(function (e) {
                 e.preventDefault()
                 $.ajax({
@@ -170,14 +198,7 @@
                     }
                 });
             })
-            var logIn = document.getElementById('log')
-            var signUp = document.getElementById('signUp')
-            var logOut = document.getElementById('logOut')
-            logIn.style.visibility = 'hidden'
-            signUp.style.visibility = 'hidden'
-            logOut.style.visibility = 'visible'
-            var mngArea = document.getElementById('mngArea')
-            mngArea.style.visibility = 'visible'
+            
         })
     </script>
     <script src="./assets/bootstrap/js/bootstrap.min.js"></script>

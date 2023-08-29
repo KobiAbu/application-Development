@@ -3,6 +3,17 @@
 const { get } = require('mongoose');
 const { orders, items, users } = require('../models/index');
 
+const getItemsList = async (list) => {
+  let itemsList = await Promise.all(list.map(async (element) => {
+    const item = await items.findById(element);
+    return item;
+  }));
+  
+  console.log(itemsList);
+  return itemsList;
+};
+
+
 
 async function searchByParams(list) {
   groupByFields = {}
@@ -129,9 +140,9 @@ const getItemByName = async (name) => {
 const getAllItems = async () => {
   return await items.find({})
 }
-const updateItem = async (id, productName, price, stock, photo, gender) => {
+const updateItem = async (id, productName, price, stock, photo, gender,type) => {
   try {
-    await items.findOneAndUpdate({ itemId: id }, { productName: productName, price: price, stock: stock, PhotoFileName: photo, gender: gender });
+    return await items.findOneAndUpdate({ _id: id }, { productName: productName, price: price, stock: stock, PhotoFileName: photo, gender: gender ,type:type});
   } catch (error) {
     return null;
   }
@@ -203,10 +214,9 @@ const getOrder = async (orderid) => {
 
 
 
-const updateOrder = async (orderid, totalAmount, date, user, items) => {
+const updateOrder = async (orderid, items,totalAmount) => {
   try {
-    await orders.findOneAndUpdate({ OrderId: orderid }, { totalAmount: totalAmount, date: date, user: user, items: items });
-    return "success"
+    return  await orders.findOneAndUpdate({ _id: orderid }, { totalAmount: totalAmount, items: items });
   } catch (error) {
     return null;
   }
@@ -256,6 +266,7 @@ const createOrder = async (totalAmount, user, items) => {
 
 module.exports =
 {
+  getItemsList,
   getAllItems,
   crateItem,
   getItemByName,

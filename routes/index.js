@@ -57,6 +57,7 @@ router.post('/createUser', loginController.createUser)
 router.post('/admin/addAnItem', ensureAdmin, dataController.createItem)
 router.get('/user/username', loginController.getUserById)
 router.get('/getAllOrders', dataController.getAllOrders)
+router.post('/admin/updateOrder', dataController.updateOrder)
 //router.post()
 
 
@@ -65,6 +66,11 @@ router.get('/getAllUsers',loginController.getUsers)
 router.get('/getUser/:password/:email', loginController.getUser)
 router.get('/getUserById/:id', loginController.getUserById)
 router.get('/getItemById/:id', dataController.getItemById);
+router.post('/getItemsList', dataController.getItemsList);
+
+// router.post("/updateItem",(req,res)=>{
+
+// })
 router.post('/checkAdmin', (req, res) => {
     if (req.body.admin === 'admin') {
         req.session.userType = "admin"

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Update Order</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600&amp;display=swap">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body id="gridContainer">
+    <div class="container text-center mt-4">
+        <h2>order details</h2>
+        <div class="container text-center mt-4">
+            <div>
+                <h4>Total Price: <span id="totalPrice">0</span></h4>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>item ID</th>
+                        <th>price</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="orderTableBody">
+
+                </tbody>
+            </table>
+        </div>
+        <div class="container text-center mt-4">
+            <button id="submitButton" class="btn btn-primary">Submit</button>
+        </div>
+        
+    </div>
+    
+    <script src="./assets/bootstrap/js/bootstrap.min.js"></script>
+    <script>
+
+$(document).ready(function () {
+            const orderTableBody = document.getElementById("orderTableBody");
+            const totalPriceElement = document.getElementById("totalPrice");
+            const t = JSON.parse(localStorage.getItem("order"));
+
+          
+
+            $.ajax({
+                type: "POST",
+                url: "/getItemsList",
+                data: {
+                    items: t
+                },
+                success: async function (items) {
+                    orderTableBody.innerHTML = "";
+                    function updateTotalPrice() {
+                const totalPrice = items.reduce((sum, item) => sum + item.price, 0);
+                totalPriceElement.textContent = totalPrice;
+            }
+
+            updateTotalPrice();
+                    items.forEach(item => {
+                        const row = document.createElement("tr");
+                        const itemNameCell = document.createElement("td");
+                        itemNameCell.textContent = item.productName;
+                        row.appendChild(itemNameCell);
+                        const itemPriceCell = document.createElement("td");
+                        itemPriceCell.textContent = item.price;
+                        row.appendChild(itemPriceCell);
+                        const actionsCell = document.createElement("td");
+                        const deleteButton = document.createElement("button");
+                        deleteButton.textContent = "Delete";
+                        deleteButton.classList.add("btn", "btn-danger");
+                        actionsCell.appendChild(deleteButton);
+                        deleteButton.addEventListener("click", () => {
+                            const index = items.indexOf(item);
+                            if (index !== -1) {
+                                items.splice(index, 1);
+                                updateTotalPrice();
+                                row.remove();
+                            }
+                        });
+                        row.appendChild(actionsCell);
+
+                        orderTableBody.appendChild(row);
+                    });
+                    $(submitButton).click(function (e) {
+                    e.preventDefault();
+                    const total = totalPriceElement.textContent;
+                    $.ajax({
+                        type: "POST",
+                        url: "/admin/updateOrder",
+                        data: {
+                            id: localStorage.getItem("orderId"),
+                            items: items,
+                            total: total
+                        },
+                        success: function (data) {
+                            localStorage.removeItem("order");
+                            localStorage.removeItem("orderId");
+                            localStorage.removeItem("total");
+                            alert("Order updated Successfully");
+                            window.location.href = "manageOrders.html";
+                        },
+                        error: function (err) {
+                            console.log(err);
+                        }
+                    })
+                });
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });})
+            // $.ajax({
+            //     type: "POST",
+            //     url: "/getItemsList",
+            //     data: {
+            //         items:t
+            //     },
+                //success: async function (items) {
+
+          
+               // const submitButton = document.getElementById("submitButton");
+                //submitButton.addEventListener("click", () => {
+                    // $.ajax({
+                    //     type: "POST",
+                    //     url: "/admin/updateOrder",
+                    //     data: {
+                    //         id: localStorage.getItem("orderId"),
+                    //         items: items,
+                    //         total:total
+                    //     },
+                    //     success: function (data) {
+                    //         localStorage.removeItem("order");
+                    //         alert("Order updated Successfully");
+                    //         window.location.href = "manageOrders.html";
+                    //     },
+                    //     error: function (err) {
+                    //         console.log(err);
+                    //     }
+                    // });
+                //});
+     
+        
+          
+            
+              
+           
+    </script>
+</body>
+
+</html>

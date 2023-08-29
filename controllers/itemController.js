@@ -1,18 +1,26 @@
 const dataService = require('../services/services')
 const getItems = async (req, res) => {
-    debugger
     const newItem = await dataService.getAllItems()
+    return res.json(newItem)
+}
+const getItemsList = async (req, res) => {
+    const newItem = await dataService.getItemsList(req.body.items)
+    console.log(newItem)
     return res.json(newItem)
 }
 
 const updateData = async (req, res) => {
-    if (!req.params.id) {
-        return res.status(400).json({ errors: ["id is required"] })
-    }
-    const item = await dataService.updateItem(req.params.id, req.params.productName, req.params.price, req.params.stock, req.params.photo, req.params.gender)
+    const item = await dataService.updateItem(req.body.id,req.body.productName,req.body.price,req.body.stock,req.body.photo,req.body.gender,req.body.type)
     if (!item) { return res.status(404).json({ errors: ["something went wrong"] }) }
     return res.json(item)
 }
+const updateOrder = async (req, res) => {
+    console.log(req.body)
+    const item = await dataService.updateOrder(req.body.id,req.body.items,req.body.total)
+    if (!item) { return res.status(404).json({ errors: ["something went wrong"] }) }
+    return res.json(item)
+}
+
 const createOrder = async (req, res) => {
 
 
@@ -93,6 +101,8 @@ const getAllOrders = async (req,res)=>{
 
 
 module.exports = {
+    getItemsList,
+    updateOrder,
     getAllOrders,
     createItem,
     getItems,

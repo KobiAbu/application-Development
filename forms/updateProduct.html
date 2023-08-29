@@ -9,15 +9,11 @@
 
 <body>
   <h1>Update Item</h1>
-  <form method="post" action="/admin/updateItem">
+  <form method="post">
     <div>
-      <label for="id">ID:</label>
-      <input type="text" id="id" name="id">
+      <label for="photo">Photo:</label>
+      <input type="text" id="photo" >
     </div>
-    <!-- <div>
-      <label for="photo">PhotoName:</label>
-      <input type="file" id="photo" name="photo" accept="image/*" >
-    </div> -->
     <div>
       <label for="productName">Product Name:</label>
       <input type="text" id="productName" name="productName">
@@ -28,46 +24,65 @@
     </div>
     <div>
       <label for="stock">Stock:</label>
-      <input type="number" id="stock" name="stock">
+      <input type="number" id="stock" >
     </div>
     <div>
-      <input type="submit" value="Add Item">
+      <label for="gender">Gender:</label>
+      <input type="text" id="gender" >
+    </div>
+    <div>
+      <label for="type">Type:</label>
+      <input type="text" id="type" >
+    </div>
+    <div>
+      <input type="submit" value="update Item">
     </div>
   </form>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
   <script>
 
-    $(function () {
+    
+      $(document).ready(function (){
+        const item=JSON.parse(localStorage.getItem("item"));
+        console.log(item)
+        const name = document.getElementById('productName');
+        const photo = document.getElementById('photo');
+        const price = document.getElementById('price');
+        const stock = document.getElementById('stock');
+        const gender= document.getElementById('gender')
+        const type= document.getElementById('type')
+        console.log(item.stock)
+        stock.value=item.stock;
+        price.value=item.price;
+        name.value=item.productName;
+        photo.value=item.PhotoFileName;
+        gender.value=item.gender
+        type.value=item.type
 
       $(document.forms[0]).submit(function (e) {
         e.preventDefault();
         $.ajax({
-          url: "/admin/addAnItem",
+          url: "/admin/update",
           type: "POST",
-          data: $(document.forms[0]).serialize(),
-          //contentType:"application/json; charset=utf-8",
-          //dataType:"json",
-          success: function (data) {
-            document.getElementById('id').value = data.id;
-            document.getElementById('productName').value = data.productName;
-            document.getElementById('price').value = data.price;
-            document.getElementById('stock').value = data.stock;
-            document.getElementById('photo').value = data.photo;
-            alert("Item updated Successfully");
-            console.log(data);
+          data: {
+            id: item._id,
+            photo: photo.value,
+            productName: name.value,
+            price: price.value,
+            stock: stock.value,
+            gender:gender.value,
+            type:type.value
           },
-          //             error:function(data){
-          //               document.getElementById('id').value = "";
-          //               document.getElementById('productName').value = "";
-          //               document.getElementById('price').value = "";
-          //               document.getElementById('stock').value = "";
-          //               document.getElementById('photo').value = "";
-
-          //               alert(data.responseText);
-          //   }
+          success: function (data) {
+            localStorage.removeItem("item");
+            alert("Item updated Successfully");
+            window.location.href = "manageItems.html";
+          },
+         
         });
       });
     })
+
 
   </script>
 </body>

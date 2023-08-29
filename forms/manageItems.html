@@ -104,7 +104,6 @@
         }
         $(document).ready(async function () {
             let list = await getAllItems()
-            console.log(list);
             const itemTableBody = document.getElementById('itemTableBody');
 
             // Clear any existing rows
@@ -123,9 +122,11 @@
                 const updateButton = document.createElement('button');
                 updateButton.textContent = 'Update';
                 updateButton.classList.add('btn', 'btn-primary', 'mr-2');
-                updateButton.addEventListener('click', () => {
-                    // Handle update action here
-                    console.log('Update button clicked for item:', item);
+                updateButton.addEventListener('click',()=>
+                {
+                    console.log(item)
+                 localStorage.setItem('item',JSON.stringify(item))
+                 window.location.href="updateProduct.html"   
                 });
 
                 const deleteButton = document.createElement('button');
@@ -155,14 +156,32 @@
                     }
                 });
             })
-            var logIn = document.getElementById('log')
-            var signUp = document.getElementById('signUp')
-            var logOut = document.getElementById('logOut')
-            logIn.style.visibility = 'hidden'
-            signUp.style.visibility = 'hidden'
-            logOut.style.visibility = 'visible'
-            var mngArea = document.getElementById('mngArea')
-            mngArea.style.visibility = 'visible'
+            $.ajax({
+                type: "GET",
+                url: "/getUserType",
+                success: function (response) {
+
+                    if (response) {
+                        if (response === 'admin') {
+                            var mng = document.getElementById('mngArea')
+                            mng.style.visibility = 'visible'
+                        }
+                        if (response === 'user') {
+                            var persArea = document.getElementById('prsArea')
+                            persArea.style.visibility = 'visible'
+
+                        }
+                        var logIn = document.getElementById('log')
+                        var signUp = document.getElementById('signUp')
+                        var logOut = document.getElementById('logOut')
+                        logIn.style.visibility = 'hidden'
+                        signUp.style.visibility = 'hidden'
+                        logOut.style.visibility = 'visible'
+                    }
+
+                }
+            });
+
         })
     </script>
     <script src="./assets/bootstrap/js/bootstrap.min.js"></script>

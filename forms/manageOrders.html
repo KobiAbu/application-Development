@@ -127,8 +127,12 @@
                 updateButton.textContent = 'Update';
                 updateButton.classList.add('btn', 'btn-primary', 'btn-sm', 'me-2');
                 updateButton.addEventListener('click', () => {
-                    // Add your update logic here
-                    // You can use order._id to identify the order to update
+                    localStorage.setItem('orderId', order._id);
+                    localStorage.setItem('order', JSON.stringify(order.items));
+                    localStorage.setItem('total', order.totalAmount);
+
+                    console.log(localStorage.getItem('order'));
+                    window.location.href = 'updateOrder.html';
                 });
 
                 const deleteButton = document.createElement('button');
@@ -160,14 +164,32 @@
                     }
                 });
             })
-            var logIn = document.getElementById('log')
-            var signUp = document.getElementById('signUp')
-            var logOut = document.getElementById('logOut')
-            logIn.style.visibility = 'hidden'
-            signUp.style.visibility = 'hidden'
-            logOut.style.visibility = 'visible'
-            var mngArea = document.getElementById('mngArea')
-            mngArea.style.visibility = 'visible'
+            $.ajax({
+                type: "GET",
+                url: "/getUserType",
+                success: function (response) {
+
+                    if (response) {
+                        if (response === 'admin') {
+                            var mng = document.getElementById('mngArea')
+                            mng.style.visibility = 'visible'
+                        }
+                        if (response === 'user') {
+                            var persArea = document.getElementById('prsArea')
+                            persArea.style.visibility = 'visible'
+
+                        }
+                        var logIn = document.getElementById('log')
+                        var signUp = document.getElementById('signUp')
+                        var logOut = document.getElementById('logOut')
+                        logIn.style.visibility = 'hidden'
+                        signUp.style.visibility = 'hidden'
+                        logOut.style.visibility = 'visible'
+                    }
+
+                }
+            });
+
         })
     </script>
     <script src="./assets/bootstrap/js/bootstrap.min.js"></script>

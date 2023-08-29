@@ -70,7 +70,7 @@
             if (document.getElementById('chbox').checked) {
               var pageId = "118111844713347";
               var accessToken = "EAAfWSg2C55QBO8r9O5Kjt5gI5jiyqRmcZBfLPwOnq0iYk5HOJZBfXUF1qQTsagqtozeaqgVUfJTHNE6cZAMkJQYJil2gYZCndm1m2ZBTZBEGOkz1B5gE1AfzKY27UPmPws5ZB7JBkMHo7EJsayRLle5y6m9z4Ik4TZAmBy2iJxi3LnI4gZCK7s1QXpYyOZA8ZAQktEXgzkNx8gZD";
-              var message = "New Item Added to the our website \n" + "ID: " + document.getElementById('id').value + "\n" + "Name: " + document.getElementById('productName').value + "\n" + "Price: " + document.getElementById('price').value + "\n" + "Stock: " + document.getElementById('stock').value + "\n" + "Photo: " + document.getElementById('photo').value + "\n";
+              var message = "New Item Added to the our website \n" + "Name: " + document.getElementById('productName').value + "\n" + "Price: " + document.getElementById('price').value + "\n" + "Stock: " + document.getElementById('stock').value + "\n";
               $.ajax({
                 url: "https://graph.facebook.com/" + pageId + "/feed",
                 type: "POST",
