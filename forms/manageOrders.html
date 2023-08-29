@@ -47,6 +47,30 @@
     </nav>
 
     <br></br>
+    <select name="order-Total" id="orderTotal">
+        <option value="">Total</option>
+        <option value="1000">up to 1000</option>
+        <option value="2500">up to 2500</option>
+        <option value="5000">up to 5000</option>
+        <option value="7500">up to 7500</option>
+        <option value="10000">up to 10000</option>
+    </select>
+    <select name="date" id="date">
+        <option value="">date</option>
+        <option value="0">this month</option>
+        <option value="3">last 3 months</option>
+        <option value="6">last 6 months</option>
+        <option value="12">this year</option>
+    </select>
+    <select name="numOfItems" id="numOfItems">
+        <option value="">number of items</option>
+        <option value="2">up to 2</option>
+        <option value="4">up to 4</option>
+        <option value="6">up to 6</option>
+        <option value="10">up to 10</option>
+
+
+    </select>
 
     <div class="container text-center mt-4">
         <h2>Orders</h2>
@@ -59,6 +83,7 @@
                 <thead>
                     <tr>
                         <th>Order ID</th>
+                        <th>Date</th>
                         <th>Number Of Products</th>
                         <th>Total</th>
                         <th>Actions</th>
@@ -103,8 +128,56 @@
             })
         };
         $(document).ready(async function () {
-            let orders = await getAllOrders();
+            
+            const orderTotalSelect = document.getElementById('orderTotal');
+    orderTotalSelect.addEventListener('change', async function () {
+        helper()
+    });
 
+    // Event listener for the 'date' select element
+    const dateSelect = document.getElementById('date');
+    dateSelect.addEventListener('change', async function () {
+        helper()
+    });
+
+    // Event listener for the 'numOfItems' select element
+    const numOfItemsSelect = document.getElementById('numOfItems');
+    numOfItemsSelect.addEventListener('change', async function () {
+        const dateSelect = document.getElementById('date').value;
+       helper()
+    });
+    // change at home
+    async function helper() {
+        const data = {}
+        let newItems
+        const priceValue = $('#price-range').val();
+        if (priceValue) {
+            data.price = parseInt(priceValue)
+        }
+        const genderValue = $('#gender').val();
+        if (genderValue) {
+            data.gender = genderValue
+        }
+        const typeValue = $('#type').val();
+        if (typeValue) {
+            data.type = typeValue
+        }
+        if (typeValue || priceValue || genderValue) {
+            console.log("enter")
+            newItems = await getSpecificItems(data);
+            console.log(newItems)
+        }
+        else {
+            newItems = await getAllItems();
+        }
+        renderItems(newItems)
+
+    }
+            let orders = await getAllOrders();
+            const renderOrders=async function () {  
+            const orderTotalSelect = document.getElementById('orderTotal');
+            const dateSelect = document.getElementById('date');
+            const numOfItemsSelect = document.getElementById('numOfItems');
             const orderTableBody = document.getElementById('orderTableBody');
 
             // Clear any existing rows
@@ -114,6 +187,8 @@
             orders.forEach(order => {
                 const row = document.createElement('tr');
                 const orderIdCell = document.createElement('td');
+                const dateCell = document.createElement('td');
+                dateCell.textContent = order.addedDate;
                 const numOfProductsCell = document.createElement('td');
                 const totalCell = document.createElement('td');
                 const actionsCell = document.createElement('td');
@@ -166,18 +241,20 @@
                 });
 
                 row.appendChild(orderIdCell);
+                row.appendChild(dateCell);
                 row.appendChild(numOfProductsCell);
                 row.appendChild(totalCell);
                 row.appendChild(actionsCell);
 
                 orderTableBody.appendChild(row);
             });
-
+        }
             $(logOut).click(function (e) {
                 e.preventDefault()
                 $.ajax({
                     url: "/logOut",
                     success: function (response) {
+                        localStorage.setItem('products', null)
                         window.location.href = "index.html";
                     }
                 });
@@ -207,6 +284,7 @@
 
                 }
             });
+            await renderOrders();
           
         })
     </script>

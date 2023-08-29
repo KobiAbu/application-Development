@@ -70,20 +70,25 @@
             </div>
         </div>
     </nav>
-    <div class="container text-center mt-4">
-        <h1>Statistical Data</h1>
+    <div class="col-md-6 mx-auto text-center">
+        <h2>Total orders per month</h2>
+        <div class="chart-container" id="orderDistributionChart"></div>
+    </div>
+    </div> <!-- Close the first row div -->
+    </div> <!-- Close the container div -->
+    
+    <!-- Add some space between the two graph divs -->
+    <div style="margin-top: 40px;"></div>
+    
+    <div class="container text-center">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-6 mx-auto text-center">
                 <h2>Average of total price per user</h2>
                 <div class="chart-container" id="averagePurchaseChart"></div>
-            </div>            
-            <!-- Add another graph here -->
-            <div class="col-md-6">
-                <h2>Order Distribution</h2>
-                <div class="chart-container" id="orderDistributionChart"></div>
             </div>
         </div>
     </div>
+    
 
     
 
@@ -137,7 +142,7 @@
 
                 }
             });
-            const margin = { top: 20, right: 30, bottom: 30, left: 40 };
+            const margin = { top: 20, right: 60, bottom: 30, left: 45 };
             const width = 500 - margin.left - margin.right;
             const height = 300 - margin.top - margin.bottom;
 
@@ -218,50 +223,86 @@
                 .attr("height", d => height - y(d.averagePrice));
 
         // Process order data and create a map of months to counts
+        const monthNames = {
+    "01": "January",
+    "02": "February",
+    "03": "March",
+    "04": "April",
+    "05": "May",
+    "06": "June",
+    "07": "July",
+    "08": "August",
+    "09": "September",
+    "10": "October",
+    "11": "November",
+    "12": "December"
+};
+
         const orderCountPerMonth = new Map();
         orderData.forEach(order => {
-            const orderDate = new Date(order.orderDate);
-            const month = orderDate.getMonth(); // Month index (0-11)
+            const orderDate = order.addedDate;
+            var month = orderDate.split('-')[1];
+            console.log(month);
             const count = orderCountPerMonth.get(month) || 0;
             orderCountPerMonth.set(month, count + 1);
         });
 
         // Convert the map into an array of objects
-        const orderCountPerMonthArray = Array.from(orderCountPerMonth, ([month, count]) => ({ month, count }));
-
-        // ... Your existing code ...
+        const orderCountPerMonthArray = Array.from(orderCountPerMonth, ([month, count]) => ({
+    month: monthNames[month],
+    count
+}));
 
         // Create a pie chart
         const radius = Math.min(width, height) / 2;
-        const pie = d3.pie().value(d => d.count);
-        const arc = d3.arc().innerRadius(0).outerRadius(radius);
+const pie = d3.pie().value(d => d.count);
+const arc = d3.arc().innerRadius(0).outerRadius(radius);
 
-        const color = d3.scaleOrdinal(d3.schemeCategory10);
+const color = d3.scaleOrdinal(d3.schemeCategory10);
 
-        const pieSvg = d3.select("#orderDistributionChart") // Make sure this matches the ID in your HTML
-            .append("svg")
-            .attr("width", width)
-            .attr("height", height)
-            .append("g")
-            .attr("transform", `translate(${width / 2},${height / 2})`);
+const pieSvg = d3.select("#orderDistributionChart") // Make sure this matches the ID in your HTML
+    .append("svg")
+    .attr("width", width + margin.left + margin.right) // Make the width larger
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", `translate(${width / 2},${height / 2})`);
 
-        const arcs = pieSvg.selectAll("arc")
-            .data(pie(orderCountPerMonthArray))
-            .enter()
-            .append("g")
-            .attr("class", "arc");
+const arcs = pieSvg.selectAll("arc")
+    .data(pie(orderCountPerMonthArray))
+    .enter()
+    .append("g")
+    .attr("class", "arc");
 
         arcs.append("path")
             .attr("d", arc)
-            .attr("fill", (d, i) => color(i));
+            .attr("fill", (d, i) => color(i)); // Use different colors for each month
 
         arcs.append("text")
             .attr("transform", d => `translate(${arc.centroid(d)})`)
             .attr("dy", "0.35em")
             .text(d => d.data.count);
+        // Add legend
+        const legend = pieSvg.selectAll(".legend")
+            .data(orderCountPerMonthArray)
+            .enter().append("g")
+            .attr("class", "legend")
+            .attr("transform", (d, i) => `translate(0,${(i - orderCountPerMonthArray.length / 2 + 1) * 30})`);
+
+        legend.append("rect")
+            .attr("x", radius + 10)
+            .attr("width", 18)
+            .attr("height", 18)
+            .attr("fill", (d, i) => color(i));
+
+        legend.append("text")
+            .attr("x", radius + 40)
+            .attr("y", 9)
+            .attr("dy", ".35em")
+            .style("text-anchor", "start")
+            .text((d, i) => ` ${d.month}: ${d.count}`);
 
                 });
-
+          
         
     </script>
 </body>

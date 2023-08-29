@@ -155,8 +155,27 @@
                 
 
                 const deleteButton = document.createElement('button');
+                deleteButton.style.marginRight = '5px';
+                const makeAdminButton = document.createElement('button');
+                makeAdminButton.textContent = 'make-Admin';
+                makeAdminButton.classList.add('btn', 'btn-danger', 'btn-sm');
                 deleteButton.textContent = 'Delete';
                 deleteButton.classList.add('btn', 'btn-danger', 'btn-sm');
+                makeAdminButton.addEventListener('click',()=>
+                {
+                    $.ajax({
+                        type: "POST",
+                        url: `/admin/makeAdmin/${user.userName}`,
+                        contentType: 'application/json',
+                        success: function (data) {
+                           alert("changes saved")
+                            userTypeCell.textContent = 'admin';
+                        },
+                        error: function (error) {
+                            console.log(error);
+                        }
+                    });
+                })
                 deleteButton.addEventListener('click', () => {
                     $.ajax({
                         type: "DELETE",
@@ -179,6 +198,7 @@
                 // Append buttons to the actions cell
             
                 actionsCell.appendChild(deleteButton);
+                actionsCell.appendChild(makeAdminButton);
 
                 row.appendChild(userIdCell);
                 row.appendChild(passwordCell);
@@ -194,6 +214,7 @@
                 $.ajax({
                     url: "/logOut",
                     success: function (response) {
+                        localStorage.setItem('products', null)
                         window.location.href = "index.html";
                     }
                 });

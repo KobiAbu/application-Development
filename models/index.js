@@ -13,7 +13,10 @@ const orderScheme = new schema(
         user: {
             type: mongoose.Schema.Types.ObjectId, ref: 'users'
         },
-        items: [{ type: mongoose.Schema.Types.ObjectId, ref: 'items' }]
+        items: [{ type: mongoose.Schema.Types.ObjectId, ref: 'items' }],
+        addedDate:{
+            type:String,
+        }
 
     }
 )
@@ -35,7 +38,7 @@ const userScheme = new schema(
             enum: ['admin', 'user'],
             default: 'user'
         },
-
+    
         orders: [{ type: mongoose.Schema.Types.Array, ref: 'orders' }]
         , adress:
         {
@@ -74,6 +77,7 @@ const data = new schema({
         type: String,
         required: true
     }
+    
 
 })
 

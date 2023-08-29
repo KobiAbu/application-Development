@@ -37,13 +37,15 @@
     let currentDay = String(date.getDate() - 1).padStart(2, '0');
 
     let currentMonth = String(date.getMonth() + 1).padStart(2, "0");
+    let currentYear = date.getFullYear();
+    let currentDate = `${currentYear}-${currentMonth}-${currentDay}`
     let backFourMonths = String(date.getMonth() - 4).padStart(2, "0");
 
-    let currentYear = date.getFullYear();
+    
 
     // we will display the date as DD-MM-YYYY 
 
-    let currentDate = `${currentYear}-${currentMonth}-${currentDay}`
+    
     let oneMonthAGo = `${currentYear}-${String(date.getMonth() - 1).padStart(2, "0")}-${currentDay}`
     let twoMonthAGo = `${currentYear}-${String(date.getMonth() - 1).padStart(2, "0")}-${currentDay}`
     let threeMonthAGo = `${currentYear}-${String(date.getMonth() - 1).padStart(2, "0")}-${currentDay}`
