@@ -33,18 +33,18 @@ const createOrder = async (req, res) => {
 }
 
 const deleteData = async (req, res) => {
-    const newItem = await dataService.deleteItem(req.params.id)
+    const newItem = await dataService.deleteItem(req.params._id)
     if (!newItem) { return res.status(404).json({ errors: ["item not found"] }) }
     else {
         res.json("item deleted")
     }
-    res.send()
+  
 }
 
 const createItem = async (req, res) => {
     //implement premissions check
     const name = req.body.photo
-    const newItem = await dataService.crateItem(req.body.id, req.body.productName, req.body.price, req.body.stock, name, req.body.gender, req.body.type)
+    const newItem = await dataService.crateItem( req.body.productName, req.body.price, req.body.stock, name, req.body.gender, req.body.type)
     if (newItem) {
 
         res.status(201).send("great")
@@ -98,9 +98,14 @@ const getAllOrders = async (req,res)=>{
    const list =  await dataService.getAllOrders()
    return res.json(list)
 }
+const deleteOrder = async (req,res)=>{
+    const list =  await dataService.deleteOrder(req.params._id)
+    return res.json(list)
+}
 
 
 module.exports = {
+    deleteOrder,
     getItemsList,
     updateOrder,
     getAllOrders,

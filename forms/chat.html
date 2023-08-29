@@ -1,60 +1,144 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simple Chat</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            max-width: 600px;
-            margin: auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-        }
-        #messageArea {
-            height: 300px;
-            border: 1px solid #ccc;
-            overflow-y: scroll;
-            padding: 10px;
-        }
-    </style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
 </head>
-<body>
-    <div class="container">
-        <h1> Chat</h1>
-        <div id="messageArea"></div>
-        <input type="text" id="messageInput" placeholder="Type your message...">
-        <button id="sendButton">Send</button>
+<body id="gridContainer">
+    <div class="collapse navbar-collapse" id="navcol-1">
+        <ul class="nav nav-tabs">
+            <li class="nav-item"><a class="nav-link" href="products.html">catalog</a></li>
+            <li class="nav-item"><a class="nav-link" href="sign_up.html">sign up</a><a class="nav-link"
+                    href="log_in.html">log in</a></li>
+        </ul>
+        <a class="btn btn-primary ms-auto" role="button" href="/cart.html">cart</a><a class="navbar-brand"
+            href="index.html">Gold street</a>
     </div>
-    <script src ="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+    <nav class="navbar navbar-expand-md navbar-light">
+        <div class="container-fluid"><img src="assets/img/Letter-G-Jewelry-Logo%20(1).jpg" width="38" height="38"><a
+                class="navbar-brand" href="index.html">Gold street</a>
+            <div class="collapse navbar-collapse" id="navcol-2" style="margin-left: 17px;">
+                <ul class="navbar-nav" style="width: 432.125px;padding-right: 0px;">
+                    <li class="nav-item"><a class="nav-link" href="#"></a></li>
+                    <li class="nav-item"><a class="nav-link" href="products.html"
+                            style="margin-left: -84px;">catalog</a></li>
+                    <li class="nav-item"><a id="signUp" class="nav-link" href="sign_up.html">sign up</a></li>
+
+                    <li class="nav-item"><a id="log" class="nav-link" href="log_in.html">log in</a></li>
+                    <li class="nav-item"><a id="mngArea" class="nav-link" href="managerArea.html" style="visibility: hidden">manager
+                            area</a></li>
+                    <li class="nav-item"><a id="logOut" class="nav-link" href="" style="visibility: hidden">log out</a>
+                    </li>
+
+                </ul>
+                <a id="prsArea" class="btn btn-primary ms-auto" role="button" href="userSet.html"
+                    style="visibility: hidden">personal
+                    area</a>
+                <a class="btn btn-primary ms-auto" role="button" href="/cart.html">cart</a>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Our Chat</h1>
+        <div id="messageArea" class="border p-3 mb-3"></div>
+        <div class="input-group mb-3">
+            <input type="text" id="messageInput" class="form-control" placeholder="Type your message...">
+            <div class="input-group-append">
+                <button id="sendButton" class="btn btn-primary">Send</button>
+            </div>
+        </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script>
-        const socket = io();
+       
+    const socket = io();
 
-        const messageArea = document.getElementById('messageArea');
-        const messageInput = document.getElementById('messageInput');
-        const sendButton = document.getElementById('sendButton');
+    const messageArea = document.getElementById('messageArea');
+    const messageInput = document.getElementById('messageInput');
+    const sendButton = document.getElementById('sendButton');
 
-        sendButton.addEventListener('click', () => {
-            const message = messageInput.value;
-            if (message.trim() !== '') {
-                socket.emit('new message', message);
-                messageInput.value = '';
-            }
-        });
+    // Fetch user's name from the server
+    let username = '';
 
-        socket.on('new message', (msg) => {
-            const messageElement = document.createElement('div');
-            messageElement.textContent = msg;
-            messageArea.appendChild(messageElement);
-            messageArea.scrollTop = messageArea.scrollHeight;
-        });
+    $.ajax({
+        type: 'GET',
+        url: "/getUserData",
+        success: function (response) {
+            console.log(response);
+            username = response.userName;
+        },
+        error: function () {
+            console.error('Error fetching user name');
+        }
+    });
+
+    sendButton.addEventListener('click', () => {
+        const message = messageInput.value;
+        if (message.trim() !== '') {
+            socket.emit('new message', { username, message }); // Send both username and message
+            messageInput.value = '';
+        }
+    });
+
+    socket.on('new message', (data) => {
+        const messageElement = document.createElement('div');
+        const messageText = document.createTextNode(`${data.username}: ${data.message}`);
+
+        messageElement.appendChild(messageText);
+
+        messageArea.appendChild(messageElement);
+        messageArea.scrollTop = messageArea.scrollHeight;
+    });
+    $(logOut).click(function (e) {
+                e.preventDefault()
+                $.ajax({
+                    url: "/logOut",
+                    success: function (response) {
+                        window.location.href = "index.html";
+                    }
+                });
+            })
+    $.ajax({
+                type: "GET", 
+                url: "/getUserType",
+                success: function (response) {
+
+                    if (response) {
+                        if (response === 'admin') {
+                            var mng = document.getElementById('mngArea')
+                            mng.style.visibility = 'visible'
+                        }
+                        if (response === 'user') {
+                            var persArea = document.getElementById('prsArea')
+                            persArea.style.visibility = 'visible'
+
+                        }
+                        var logIn = document.getElementById('log')
+                        var signUp = document.getElementById('signUp')
+                        var logOut = document.getElementById('logOut')
+                        logIn.style.visibility = 'hidden'
+                        signUp.style.visibility = 'hidden'
+                        logOut.style.visibility = 'visible'
+                    }
+
+                }
+            });
+</script>
+    <script>
+        var input = document.getElementById("messageInput");
+
+input.addEventListener("keypress", function(event) {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    document.getElementById("sendButton").click();
+  }
+}); 
     </script>
 </body>
 </html>

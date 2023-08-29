@@ -94,9 +94,9 @@ const getUser = async (name, password) => {
 }
 
 const crateItem = async (productName, price, stock, picture, gender, type) => {
-  if (await checkIfExist(id)) {
-    return null;
-  }
+  // if (await checkIfExist(id)) {
+  //   return null;
+  // }
   try {
     //console.log(picture)
     const item = new items({
@@ -161,7 +161,7 @@ const deleteUser = async (name) => {
 
 const deleteItem = async (id) => {
   try {
-    await items.findOneAndDelete({ itemId: id })
+    await items.findOneAndDelete({ _id: id })
     return "succes"
   } catch (error) {
     return null;
@@ -224,7 +224,7 @@ const updateOrder = async (orderid, items,totalAmount) => {
 
 const deleteOrder = async (orderid) => {
   try {
-    await orders.findOneAndDelete({ OrderId: orderid });
+    await orders.findOneAndDelete({ _id: orderid });
     return "success"
   } catch (error) {
     return null;

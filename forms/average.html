@@ -4,9 +4,36 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Statistical Data</title>
+    <title>store</title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
-    <!-- Other stylesheets and links -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600&amp;display=swap">
+
+    <link rel="stylesheet" href="assets/css/animate.min.css">
+    <link rel="stylesheet" href="assets/css/Corporate-Footer-Clean.css">
+    <link rel="stylesheet" href="assets/css/Grid-and-List-view-V10-style.css">
+    <link rel="stylesheet" href="assets/css/Grid-and-List-view-V10.css">
+    <link rel="stylesheet" href="assets/css/Login-Form-Basic-icons.css">
+    <link rel="stylesheet" href="assets/css/Pretty-Footer-.css">
+    <link rel="stylesheet" href="assets/css/Sign-Up-Form---Gabriela-Carvalho.css">
+    <link rel="stylesheet" href="assets/css/styles-1.css">
+    <style>
+        /* Custom styles */
+        body {
+            font-family: 'Nunito Sans', sans-serif;
+        }
+        #gridContainer {
+            padding: 20px;
+        }
+        .chart-container {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .table-container {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 
 <body id="gridContainer">
@@ -43,23 +70,33 @@
             </div>
         </div>
     </nav>
-
     <div class="container text-center mt-4">
         <h1>Statistical Data</h1>
         <div class="row">
             <div class="col-md-6">
-                <h2>Average Cumulative Amount of Purchases per Month</h2>
-                <div id="averagePurchaseChart"></div>
-            </div>
+                <h2>Average of total price per user</h2>
+                <div class="chart-container" id="averagePurchaseChart"></div>
+            </div>            
             <!-- Add another graph here -->
+            <div class="col-md-6">
+                <h2>Order Distribution</h2>
+                <div class="chart-container" id="orderDistributionChart"></div>
+            </div>
         </div>
     </div>
 
     
 
+    <footer>
+        <!-- Footer content -->
+    </footer>
+
     <script src="./assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="./assets/js/bs-init.js"></script>
     <script src="./assets/js/Grid-and-List-view-V10-script.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
 
@@ -74,41 +111,58 @@
                     }
                 });
             })
+            // Function to extract a specific parameter's value from a query string
             $.ajax({
-            type: "GET",
-            url: "/getUserType",
-            success: function (response) {
+                type: "GET",
+                url: "/getUserType",
+                success: function (response) {
 
-                if (response) {
-                    if (response === 'admin') {
-                        var mng = document.getElementById('mngArea')
-                        mng.style.visibility = 'visible'
-                    }
-                    if (response === 'user') {
-                        var persArea = document.getElementById('prsArea')
-                        persArea.style.visibility = 'visible'
+                    if (response) {
+                        if (response === 'admin') {
+                            var mng = document.getElementById('mngArea')
+                            mng.style.visibility = 'visible'
+                        }
+                        if (response === 'user') {
+                            var persArea = document.getElementById('prsArea')
+                            persArea.style.visibility = 'visible'
 
+                        }
+                        var logIn = document.getElementById('log')
+                        var signUp = document.getElementById('signUp')
+                        var logOut = document.getElementById('logOut')
+                        logIn.style.visibility = 'hidden'
+                        signUp.style.visibility = 'hidden'
+                        logOut.style.visibility = 'visible'
                     }
-                    var logIn = document.getElementById('log')
-                    var signUp = document.getElementById('signUp')
-                    var logOut = document.getElementById('logOut')
-                    logIn.style.visibility = 'hidden'
-                    signUp.style.visibility = 'hidden'
-                    logOut.style.visibility = 'visible'
+
                 }
-
-            }
-        });
+            });
             const margin = { top: 20, right: 30, bottom: 30, left: 40 };
             const width = 500 - margin.left - margin.right;
             const height = 300 - margin.top - margin.bottom;
-            
-            const svg = d3.select("#averagePurchaseChart")
+
+            const svg = d3.select("#averagePurchaseChart")  // Make sure this matches the ID in your HTML
                 .append("svg")
                 .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)
                 .append("g")
                 .attr("transform", `translate(${margin.left},${margin.top})`);
+
+            async function fetchUserData() {
+                try {
+                    const response = await fetch('http://localhost:8082/userController'); // Update the endpoint
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch data');
+                    }
+                    const userData = await response.json();
+                    // console.log(userData);
+                    return userData;
+                    
+                } catch (error) {
+                    console.error('Error fetching user data:', error);
+                    return [];
+                }
+            }
 
             async function fetchOrderData() {
                 try {
@@ -124,43 +178,91 @@
                 }
             }
 
+            const userData = await fetchUserData();
             const orderData = await fetchOrderData();
 
-            // Calculate average cumulative amounts
-            let cumulativeSum = 0;
-            const cumulativeAmounts = orderData.map(entry => {
-                cumulativeSum += entry.totalAmount;
-                return cumulativeSum;
+            // Calculate average total price per user
+            const userAveragePrices = userData.map(user => {
+                const userOrders = orderData.filter(order => order.user === user._id);
+                const totalPrice = userOrders.reduce((total, order) => total + order.totalAmount, 0);
+                return { user: user.userName, averagePrice: totalPrice / userOrders.length };
             });
 
             const x = d3.scaleBand()
-                .domain(orderData.map(entry => entry._id))
+                .domain(userAveragePrices.map(entry => entry.user))
                 .range([0, width])
                 .padding(0.1);
 
             const y = d3.scaleLinear()
-                .domain([0, d3.max(cumulativeAmounts)])
+                .domain([0, d3.max(userAveragePrices, d => d.averagePrice)])
                 .nice()
                 .range([height, 0]);
 
             svg.append("g")
                 .attr("class", "x-axis")
                 .attr("transform", `translate(0,${height})`)
-                .call(d3.axisBottom(x));
+                .call(d3.axisBottom(x).tickValues(userAveragePrices.map(entry => entry.user)));
+                
 
             svg.append("g")
                 .attr("class", "y-axis")
                 .call(d3.axisLeft(y));
 
             svg.selectAll(".bar")
-                .data(cumulativeAmounts)
+                .data(userAveragePrices)
                 .enter().append("rect")
                 .attr("class", "bar")
-                .attr("x", (d, i) => x(orderData[i]._id))
+                .attr("x", (d, i) => x(d.user))
                 .attr("width", x.bandwidth())
-                .attr("y", d => y(d))
-                .attr("height", d => height - y(d));
+                .attr("y", d => y(d.averagePrice))
+                .attr("height", d => height - y(d.averagePrice));
+
+        // Process order data and create a map of months to counts
+        const orderCountPerMonth = new Map();
+        orderData.forEach(order => {
+            const orderDate = new Date(order.orderDate);
+            const month = orderDate.getMonth(); // Month index (0-11)
+            const count = orderCountPerMonth.get(month) || 0;
+            orderCountPerMonth.set(month, count + 1);
         });
+
+        // Convert the map into an array of objects
+        const orderCountPerMonthArray = Array.from(orderCountPerMonth, ([month, count]) => ({ month, count }));
+
+        // ... Your existing code ...
+
+        // Create a pie chart
+        const radius = Math.min(width, height) / 2;
+        const pie = d3.pie().value(d => d.count);
+        const arc = d3.arc().innerRadius(0).outerRadius(radius);
+
+        const color = d3.scaleOrdinal(d3.schemeCategory10);
+
+        const pieSvg = d3.select("#orderDistributionChart") // Make sure this matches the ID in your HTML
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height)
+            .append("g")
+            .attr("transform", `translate(${width / 2},${height / 2})`);
+
+        const arcs = pieSvg.selectAll("arc")
+            .data(pie(orderCountPerMonthArray))
+            .enter()
+            .append("g")
+            .attr("class", "arc");
+
+        arcs.append("path")
+            .attr("d", arc)
+            .attr("fill", (d, i) => color(i));
+
+        arcs.append("text")
+            .attr("transform", d => `translate(${arc.centroid(d)})`)
+            .attr("dy", "0.35em")
+            .text(d => d.data.count);
+
+                });
+
+        
     </script>
 </body>
 

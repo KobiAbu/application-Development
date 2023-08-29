@@ -146,6 +146,24 @@
                 // Append buttons to the actions cell
                 actionsCell.appendChild(updateButton);
                 actionsCell.appendChild(deleteButton);
+                deleteButton.addEventListener('click', () => {
+                    $.ajax({
+                        type: "DELETE",
+                        url: `/admin/deleteOrder/${order._id}`,
+                        contentType: 'application/json',
+                        success: function (data) {
+                            console.log(data);
+                            console.log("deleted");
+                            const parentRow = deleteButton.closest('tr');
+                            if (parentRow) {
+                                parentRow.remove();
+                            }
+                        },
+                        error: function (error) {
+                            console.log(error);
+                        }
+                    });
+                });
 
                 row.appendChild(orderIdCell);
                 row.appendChild(numOfProductsCell);
@@ -189,7 +207,7 @@
 
                 }
             });
-
+          
         })
     </script>
     <script src="./assets/bootstrap/js/bootstrap.min.js"></script>

@@ -133,8 +133,22 @@
                 deleteButton.textContent = 'Delete';
                 deleteButton.classList.add('btn', 'btn-danger');
                 deleteButton.addEventListener('click', () => {
-                    // Handle delete action here
-                    console.log('Delete button clicked for item:', item);
+                    $.ajax({
+                        type: "DELETE",
+                        url: `/admin/deleteItem/${item._id}`,
+                        contentType: 'application/json',
+                        success: function (data) {
+                            console.log(data);
+                            console.log("deleted");
+                            const parentRow = deleteButton.closest('tr');
+                            if (parentRow) {
+                                parentRow.remove();
+                            }
+                        },
+                        error: function (error) {
+                            console.log(error);
+                        }
+                    });
                 });
 
                 actionsCell.appendChild(updateButton);

@@ -68,11 +68,11 @@
         };
 
 
-        promises.push(fetchData("https://api.metalpriceapi.com/v1/" + currentDate + "?api_key=e1a0ade28f8992b598a7abf38df3cb41&base=ILS&currencies=XAU"));
-        promises.push(fetchData("https://api.metalpriceapi.com/v1/" + oneMonthAGo + "?api_key=e1a0ade28f8992b598a7abf38df3cb41&base=ILS&currencies=XAU"));
-        promises.push(fetchData("https://api.metalpriceapi.com/v1/" + twoMonthAGo + "?api_key=e1a0ade28f8992b598a7abf38df3cb41&base=ILS&currencies=XAU"));
-        promises.push(fetchData("https://api.metalpriceapi.com/v1/" + threeMonthAGo + "?api_key=e1a0ade28f8992b598a7abf38df3cb41&base=ILS&currencies=XAU"));
-        promises.push(fetchData("https://api.metalpriceapi.com/v1/" + startDAte + "?api_key=e1a0ade28f8992b598a7abf38df3cb41&base=ILS&currencies=XAU"));
+        promises.push(fetchData("https://api.metalpriceapi.com/v1/" + currentDate + "?api_key=026b44fc0110996fb895b3ddb2950c1f&base=ILS&currencies=XAU"));
+        promises.push(fetchData("https://api.metalpriceapi.com/v1/" + oneMonthAGo + "?api_key=026b44fc0110996fb895b3ddb2950c1f&base=ILS&currencies=XAU"));
+        promises.push(fetchData("https://api.metalpriceapi.com/v1/" + twoMonthAGo + "?api_key=026b44fc0110996fb895b3ddb2950c1f&base=ILS&currencies=XAU"));
+        promises.push(fetchData("https://api.metalpriceapi.com/v1/" + threeMonthAGo + "?api_key=026b44fc0110996fb895b3ddb2950c1f&base=ILS&currencies=XAU"));
+        promises.push(fetchData("https://api.metalpriceapi.com/v1/" + startDAte + "?api_key=026b44fc0110996fb895b3ddb2950c1f&base=ILS&currencies=XAU"));
 
         Promise.all(promises)
             .then(function (prices) {

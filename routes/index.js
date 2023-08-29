@@ -1,5 +1,5 @@
 const express = require('express')
-
+const { orders, items, users } = require('../models/index');
 const router = express.Router()
 const dataController = require('../controllers/itemController.js')
 const { dirname } = require('path');
@@ -12,6 +12,7 @@ const dataService = require('../services/services')
 const UserService = require('../services/UserService')
 const loginService = require('../services/loginService')
 const loginController = require('../controllers/loginController');
+
 const session = require('express-session');
 
 function ensureAdmin(req, res, next) {
@@ -51,10 +52,12 @@ router.get('/kill', (req, res) => {
     res.status(201).send("great")
 });
 router.delete('/admin/deleteUser/:userName', ensureAdmin, loginController.deleteUser);
+router.delete('/admin/deleteOrder/:_id', ensureAdmin, dataController.deleteOrder);
+router.delete('/admin/deleteItem/:_id', ensureAdmin, dataController.deleteData);
 router.post('/admin/update', ensureAdmin, dataController.updateData)
 router.get('/admin/update/:id', ensureAdmin, dataController.updateData)
 router.post('/createUser', loginController.createUser)
-router.post('/admin/addAnItem', ensureAdmin, dataController.createItem)
+router.post('/admin/addAnItem', dataController.createItem)
 router.get('/user/username', loginController.getUserById)
 router.get('/getAllOrders', dataController.getAllOrders)
 router.post('/admin/updateOrder', dataController.updateOrder)
@@ -113,6 +116,22 @@ router.get('/getUserData', (req, res) => {
     res.send(req.session.user)
 })
 router.post('/updateUserData', loginController.updateUser)
+router.get('/itemController', async function (req, res) {
+    try {
+        const order = await orders.find();
+        res.json(order);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching orders', error: error.message });
+    }
+});
+router.get('/userController', async function (req, res) {
+    try {
+        const user = await users.find(); 
+        res.json(user);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching users', error: error.message });
+    }
+});
 router.post('/search', dataController.searchByParams)
 
 
