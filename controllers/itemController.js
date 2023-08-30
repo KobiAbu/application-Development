@@ -3,7 +3,6 @@ const dataService = require("../services/services");
 
 const getSpecificOrder = async (req, res) => {
 
-  //console.log(req.body); // Use req.body instead of data
 
   let list = [];
   if (req.body.amount) {
@@ -95,7 +94,6 @@ const deleteData = async (req, res) => {
 };
 
 const createItem = async (req, res) => {
-  //implement premissions check
   const name = req.body.photo;
   const newItem = await dataService.crateItem(
     req.body.productName,

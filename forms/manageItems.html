@@ -105,10 +105,8 @@
             let list = await getAllItems()
             const itemTableBody = document.getElementById('itemTableBody');
 
-            // Clear any existing rows
             itemTableBody.innerHTML = '';
 
-            // Loop through the list of items and create rows for them
             list.forEach(item => {
                 const row = document.createElement('tr');
                 const nameCell = document.createElement('td');
@@ -121,11 +119,10 @@
                 const updateButton = document.createElement('button');
                 updateButton.textContent = 'Update';
                 updateButton.classList.add('btn', 'btn-primary', 'mr-2');
-                updateButton.addEventListener('click',()=>
-                {
+                updateButton.addEventListener('click', () => {
                     console.log(item)
-                 localStorage.setItem('item',JSON.stringify(item))
-                 window.location.href="updateProduct.html"   
+                    localStorage.setItem('item', JSON.stringify(item))
+                    window.location.href = "updateProduct.html"
                 });
 
                 const deleteButton = document.createElement('button');

@@ -43,7 +43,6 @@
 
     
 
-    // we will display the date as DD-MM-YYYY 
 
     
     let oneMonthAGo = `${currentYear}-${String(date.getMonth() - 1).padStart(2, "0")}-${currentDay}`
@@ -51,7 +50,7 @@
     let threeMonthAGo = `${currentYear}-${String(date.getMonth() - 1).padStart(2, "0")}-${currentDay}`
     let startDAte = `${currentYear}-${backFourMonths}-${currentDay}`;
     $(document).ready(function () {
-        const promises = []; // Array to store promises
+        const promises = []; 
 
         const fetchData = function (url) {
             return new Promise(function (resolve, reject) {
@@ -103,110 +102,6 @@
     });
 
 </script>
-<!--  
-<script>
-//      var myHeaders = new Headers();
-//  myHeaders.append("x-access-token", "goldapi-29285ctrllkucdcy-io");
-// myHeaders.append("Content-Type", "application/json");
 
-
-//         $(document).ready(function()
-//          {
-//             $.ajax({
-//                  url:"https://www.goldapi.io/api/XAU/USD"
-//                 ,method:"GET",
-//                  headers:{"x-access-token":"goldapi-29285ctrllkucdcy-io",
-//             "date":"20231010"},
-//                 success: function(data){
-//                  console.log(data)
-//                  console.log(data.price_gram_14k)
-//                 }
-//              })
-//          })
-    const date = new Date();
-
- let currentDay= String(date.getDate()-1).padStart(2, '0');
-
- let currentMonth = String(date.getMonth()+1).padStart(2,"0");
- let backFourMonths=String(date.getMonth()-4).padStart(2,"0");
-
- let currentYear = date.getFullYear();
-
-// we will display the date as DD-MM-YYYY 
-
-let currentDate= `${currentYear}-${currentMonth}-${currentDay}`
-let oneMonthAGo= `${currentYear}-${String(date.getMonth()-1).padStart(2,"0")}-${currentDay}`
-let twoMonthAGo= `${currentYear}-${String(date.getMonth()-1).padStart(2,"0")}-${currentDay}`
-let threeMonthAGo= `${currentYear}-${String(date.getMonth()-1).padStart(2,"0")}-${currentDay}`
-let startDAte = `${currentYear}-${backFourMonths}-${currentDay}`;
-
-        
-        const list =[]
-        $(document).ready(function()
-        {
-            $.ajax({
-                url:"https://api.metalpriceapi.com/v1/"+currentDate+"?api_key=e1a0ade28f8992b598a7abf38df3cb41&base=ILS&currencies=XAU"
-                ,method:"GET",
-               success:  function(data){
-                list[4]= (1/data.rates.XAU)/28.3495231
-               }
-            })
-
-            $.ajax({
-                url:"https://api.metalpriceapi.com/v1/"+oneMonthAGo+"?api_key=e1a0ade28f8992b598a7abf38df3cb41&base=ILS&currencies=XAU"
-                ,method:"GET",
-               success:  function(data){
-                list[3]= (1/data.rates.XAU)/28.3495231
-               }
-            })
-            $.ajax({
-                url:"https://api.metalpriceapi.com/v1/"+twoMonthAGo+"?api_key=e1a0ade28f8992b598a7abf38df3cb41&base=ILS&currencies=XAU"
-                ,method:"GET",
-               success:  function(data){
-
-                list[2]= (1/data.rates.XAU)/28.3495231
-               }
-            })
-            $.ajax({
-                url:"https://api.metalpriceapi.com/v1/"+threeMonthAGo+"?api_key=e1a0ade28f8992b598a7abf38df3cb41&base=ILS&currencies=XAU"
-                ,method:"GET",
-               success:  function(data){
-
-                list[1]=  (1/data.rates.XAU)/28.3495231
-               }
-            })
-            $.ajax({
-                url:"https://api.metalpriceapi.com/v1/"+startDAte+"?api_key=e1a0ade28f8992b598a7abf38df3cb41&base=ILS&currencies=XAU"
-                ,method:"GET",
-               success:  function(data){
-                list[0]= (1/data.rates.XAU)/28.3495231
-               }
-            })
-
-        })
-        
-        let ctx = document.getElementById("myChart").getContext("2d");
-    let myChart = new Chart(ctx, {
-        type: "line",
-        data: {
-            labels: [
-                "four months ago",
-                "three months ago",
-                "two months ago",
-                "a month ago",
-                "today",
-            
-            ],
-            datasets: [
-                {
-                    label: "gold prices (gr)",
-                    data: list,
-                    backgroundColor: "rgba(153,205,1,0.6)",
-                },
-            ],
-        },
-    });
-
-</script> -->
 
 </html>

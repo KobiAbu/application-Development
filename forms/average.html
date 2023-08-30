@@ -17,7 +17,6 @@
     <link rel="stylesheet" href="assets/css/Sign-Up-Form---Gabriela-Carvalho.css">
     <link rel="stylesheet" href="assets/css/styles-1.css">
     <style>
-        /* Custom styles */
         body {
             font-family: 'Nunito Sans', sans-serif;
         }
@@ -148,7 +147,7 @@
             const width = 500 - margin.left - margin.right;
             const height = 300 - margin.top - margin.bottom;
 
-            const svg = d3.select("#averagePurchaseChart")  // Make sure this matches the ID in your HTML
+            const svg = d3.select("#averagePurchaseChart")
                 .append("svg")
                 .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)
@@ -157,7 +156,7 @@
 
             async function fetchUserData() {
                 try {
-                    const response = await fetch('http://localhost:8082/userController'); // Update the endpoint
+                    const response = await fetch('http://localhost:8082/userController'); 
                     if (!response.ok) {
                         throw new Error('Failed to fetch data');
                     }
@@ -173,7 +172,7 @@
 
             async function fetchOrderData() {
                 try {
-                    const response = await fetch('http://localhost:8082/itemController'); // Update the endpoint
+                    const response = await fetch('http://localhost:8082/itemController'); 
                     if (!response.ok) {
                         throw new Error('Failed to fetch data');
                     }
@@ -188,7 +187,6 @@
             const userData = await fetchUserData();
             const orderData = await fetchOrderData();
 
-            // Calculate average total price per user
             const userAveragePrices = userData.map(user => {
                 const userOrders = orderData.filter(order => order.user === user._id);
                 const totalPrice = userOrders.reduce((total, order) => total + order.totalAmount, 0);
@@ -224,7 +222,6 @@
                 .attr("y", d => y(d.averagePrice))
                 .attr("height", d => height - y(d.averagePrice));
 
-            // Process order data and create a map of months to counts
             const monthNames = {
                 "01": "January",
                 "02": "February",
@@ -249,22 +246,20 @@
                 orderCountPerMonth.set(month, count + 1);
             });
 
-            // Convert the map into an array of objects
             const orderCountPerMonthArray = Array.from(orderCountPerMonth, ([month, count]) => ({
                 month: monthNames[month],
                 count
             }));
 
-            // Create a pie chart
             const radius = Math.min(width, height) / 2;
             const pie = d3.pie().value(d => d.count);
             const arc = d3.arc().innerRadius(0).outerRadius(radius);
 
             const color = d3.scaleOrdinal(d3.schemeCategory10);
 
-            const pieSvg = d3.select("#orderDistributionChart") // Make sure this matches the ID in your HTML
+            const pieSvg = d3.select("#orderDistributionChart")
                 .append("svg")
-                .attr("width", width + margin.left + margin.right) // Make the width larger
+                .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)
                 .append("g")
                 .attr("transform", `translate(${width / 2},${height / 2})`);
@@ -277,13 +272,12 @@
 
             arcs.append("path")
                 .attr("d", arc)
-                .attr("fill", (d, i) => color(i)); // Use different colors for each month
+                .attr("fill", (d, i) => color(i));
 
             arcs.append("text")
                 .attr("transform", d => `translate(${arc.centroid(d)})`)
                 .attr("dy", "0.35em")
                 .text(d => d.data.count);
-            // Add legend
             const legend = pieSvg.selectAll(".legend")
                 .data(orderCountPerMonthArray)
                 .enter().append("g")

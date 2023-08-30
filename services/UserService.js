@@ -7,13 +7,13 @@ async function createUser(firstName, lastName, email, password, userType) {
             lastName: lastName,
             email: email,
             password: password,
-            userType: userType, // Add userType if provided
+            userType: userType,
         });
 
         return await user.save();
     } catch (error) {
         console.error('Error creating user:', error);
-        throw error; // Re-throw the error to be caught by the caller
+        throw error; 
     }
 }
 

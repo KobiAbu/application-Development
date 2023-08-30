@@ -51,7 +51,7 @@
         <a href="manageUsers.html" class="btn btn-primary btn-lg" style="width: 300px;">Manage Users </a>
     </div>
     <div class="container text-center mt-4">
-        <a href="manageItems.html" class="btn btn-primary btn-lg"style="width: 300px;">Manage Item </a>
+        <a href="manageItems.html" class="btn btn-primary btn-lg" style="width: 300px;">Manage Item </a>
     </div>
     <div class="container text-center mt-4">
         <a href="manageOrders.html" class="btn btn-primary btn-lg" style="width: 300px;">Manage Orders</a>
@@ -60,7 +60,7 @@
         <a href="average.html" class="btn btn-primary btn-lg" style="width: 300px;">Statistics</a>
     </div>
     <div class="container text-center mt-4">
-        <a href="add.html" class="btn btn-primary btn-lg" style="width: 300px;" >add item</a>
+        <a href="add.html" class="btn btn-primary btn-lg" style="width: 300px;">add item</a>
     </div>
     <br></br>
 
@@ -77,14 +77,31 @@
                     }
                 });
             })
-            var logIn = document.getElementById('log')
-            var signUp = document.getElementById('signUp')
-            var logOut = document.getElementById('logOut')
-            logIn.style.visibility = 'hidden'
-            signUp.style.visibility = 'hidden'
-            logOut.style.visibility = 'visible'
-            var mngArea = document.getElementById('mngArea')
-            mngArea.style.visibility = 'visible'
+            $.ajax({
+                type: "GET",
+                url: "/getUserType",
+                success: function (response) {
+
+                    if (response) {
+                        if (response === 'admin') {
+                            var mng = document.getElementById('mngArea')
+                            mng.style.visibility = 'visible'
+                        }
+                        if (response === 'user') {
+                            var persArea = document.getElementById('prsArea')
+                            persArea.style.visibility = 'visible'
+
+                        }
+                        var logIn = document.getElementById('log')
+                        var signUp = document.getElementById('signUp')
+                        var logOut = document.getElementById('logOut')
+                        logIn.style.visibility = 'hidden'
+                        signUp.style.visibility = 'hidden'
+                        logOut.style.visibility = 'visible'
+                    }
+
+                }
+            });
         })
     </script>
     <script src="./assets/js/handlers/renderOrders.js"></script>

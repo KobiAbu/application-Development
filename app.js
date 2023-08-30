@@ -9,15 +9,7 @@ const socketIO = require('socket.io');
 const session = require('cookie-session');
 const cookieParser = require("cookie-parser");
 
-// const sessionConfig = {
-//     secret: 'SecretKey', // A secret key for signing the session ID cookie
-//     resave: false,             // Forces the session to be saved back to the session store
-//     saveUninitialized: true,  // Forces a session that is "uninitialized" to be saved to the store
-//     cookie: {
-//         secure: false,
-//         maxAge: 1000 * 60 * 60 * 24000
-//     }  // If running on HTTPS, set secure to true
-// }
+
 
 
 newLocal.env(process.env.Node_ENV, './config')
@@ -61,7 +53,6 @@ io.on('connection', (socket) => {
     });
 });
 
-//app.set('view enjine','ejs')
 server.listen(process.env.PORT, () => {
     console.log('Server started on port 8082');
 })

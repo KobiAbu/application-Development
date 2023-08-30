@@ -158,7 +158,6 @@
                     });
                 });
             }
-            // change at home
             async function helper() {
                 const data = {}
                 let newOrders
@@ -187,15 +186,10 @@
             let orders = await getAllOrders();
 
             const renderOrders = async function (list) {
-                // const orderTotalSelect = document.getElementById('orderTotal');
-                // const dateSelect = document.getElementById('date');
-                // const numOfItemsSelect = document.getElementById('numOfItems');
                 const orderTableBody = document.getElementById('orderTableBody');
 
-                // Clear any existing rows
                 orderTableBody.innerHTML = '';
 
-                // Loop through the list of orders and create rows for them
                 list.forEach(order => {
                     const row = document.createElement('tr');
                     const orderIdCell = document.createElement('td');
@@ -209,7 +203,6 @@
                     numOfProductsCell.textContent = order.items.length;
                     totalCell.textContent = order.totalAmount;
 
-                    // Create Update and Delete buttons
                     const updateButton = document.createElement('button');
                     updateButton.textContent = 'Update';
                     updateButton.classList.add('btn', 'btn-primary', 'btn-sm', 'me-2');
@@ -226,11 +219,8 @@
                     deleteButton.textContent = 'Delete';
                     deleteButton.classList.add('btn', 'btn-danger', 'btn-sm');
                     deleteButton.addEventListener('click', () => {
-                        // Add your delete logic here
-                        // You can use order._id to identify the order to delete
                     });
 
-                    // Append buttons to the actions cell
                     actionsCell.appendChild(updateButton);
                     actionsCell.appendChild(deleteButton);
                     deleteButton.addEventListener('click', () => {
@@ -239,7 +229,6 @@
                             url: `/admin/deleteOrder/${order._id}`,
                             contentType: 'application/json',
                             success: function (data) {
-                                console.log(data);
                                 console.log("deleted");
                                 const parentRow = deleteButton.closest('tr');
                                 if (parentRow) {

@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simple Chat</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <!-- <link rel="stylesheet" href="style.css"> -->
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
 </head>
+
 <body id="gridContainer">
     <div class="collapse navbar-collapse" id="navcol-1">
         <ul class="nav nav-tabs">
@@ -29,7 +30,8 @@
                     <li class="nav-item"><a id="signUp" class="nav-link" href="sign_up.html">sign up</a></li>
 
                     <li class="nav-item"><a id="log" class="nav-link" href="log_in.html">log in</a></li>
-                    <li class="nav-item"><a id="mngArea" class="nav-link" href="managerArea.html" style="visibility: hidden">manager
+                    <li class="nav-item"><a id="mngArea" class="nav-link" href="managerArea.html"
+                            style="visibility: hidden">manager
                             area</a></li>
                     <li class="nav-item"><a id="logOut" class="nav-link" href="" style="visibility: hidden">log out</a>
                     </li>
@@ -42,7 +44,7 @@
             </div>
         </div>
     </nav>
-    
+
     <div class="container mt-5">
         <h1 class="text-center mb-4">Our Chat</h1>
         <div id="messageArea" class="border p-3 mb-3"></div>
@@ -56,46 +58,46 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script>
-       
-    const socket = io();
 
-    const messageArea = document.getElementById('messageArea');
-    const messageInput = document.getElementById('messageInput');
-    const sendButton = document.getElementById('sendButton');
+        const socket = io();
 
-    // Fetch user's name from the server
-    let username = '';
+        const messageArea = document.getElementById('messageArea');
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
 
-    $.ajax({
-        type: 'GET',
-        url: "/getUserData",
-        success: function (response) {
-            console.log(response);
-            username = response.userName;
-        },
-        error: function () {
-            console.error('Error fetching user name');
-        }
-    });
+        let username = '';
 
-    sendButton.addEventListener('click', () => {
-        const message = messageInput.value;
-        if (message.trim() !== '') {
-            socket.emit('new message', { username, message }); // Send both username and message
-            messageInput.value = '';
-        }
-    });
+        $.ajax({
+            type: 'GET',
+            url: "/getUserData",
+            success: function (response) {
+                console.log(response);
+                username = response.userName;
+            },
+            error: function () {
+                console.error('Error fetching user name');
+            }
+        });
 
-    socket.on('new message', (data) => {
-        const messageElement = document.createElement('div');
-        const messageText = document.createTextNode(`${data.username}: ${data.message}`);
+        sendButton.addEventListener('click', () => {
+            const message = messageInput.value;
+            if (message.trim() !== '') {
+                socket.emit('new message', { username, message }); 
+                messageInput.value = '';
+            }
+        });
 
-        messageElement.appendChild(messageText);
+        socket.on('new message', (data) => {
+            const messageElement = document.createElement('div');
+            const messageText = document.createTextNode(`${data.username}: ${data.message}`);
 
-        messageArea.appendChild(messageElement);
-        messageArea.scrollTop = messageArea.scrollHeight;
-    });
-    $(logOut).click(function (e) {
+            messageElement.appendChild(messageText);
+
+            messageArea.appendChild(messageElement);
+            messageArea.scrollTop = messageArea.scrollHeight;
+        });
+        $(document).ready(function () {
+            $(logOut).click(function (e) {
                 e.preventDefault()
                 $.ajax({
                     url: "/logOut",
@@ -105,8 +107,8 @@
                     }
                 });
             })
-    $.ajax({
-                type: "GET", 
+            $.ajax({
+                type: "GET",
                 url: "/getUserType",
                 success: function (response) {
 
@@ -115,7 +117,7 @@
                             var mng = document.getElementById('mngArea')
                             mng.style.visibility = 'visible'
                             document.getElementById('cart').style.visibility = 'hidden'
-                        
+
                         }
                         if (response === 'user') {
                             var persArea = document.getElementById('prsArea')
@@ -132,16 +134,21 @@
 
                 }
             });
-</script>
+
+
+        })
+
+    </script>
     <script>
         var input = document.getElementById("messageInput");
 
-input.addEventListener("keypress", function(event) {
-  if (event.key === "Enter") {
-    event.preventDefault();
-    document.getElementById("sendButton").click();
-  }
-}); 
+        input.addEventListener("keypress", function (event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                document.getElementById("sendButton").click();
+            }
+        }); 
     </script>
 </body>
+
 </html>

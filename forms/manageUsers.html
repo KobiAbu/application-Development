@@ -104,7 +104,6 @@
         }
         
         $(document).ready(async function () {
-            // Function to extract a specific parameter's value from a query string
             $.ajax({
                 type: "GET",
                 url: "/getUserType",
@@ -134,10 +133,8 @@
 
             const userTableBody = document.getElementById('userTableBody');
 
-            // Clear any existing rows
             userTableBody.innerHTML = '';
 
-            // Loop through the list of users and create rows for them
             users.forEach(user => {
                 const row = document.createElement('tr');
                 const userIdCell = document.createElement('td');
@@ -194,7 +191,6 @@
                     });
                 });
 
-                // Append buttons to the actions cell
             
                 actionsCell.appendChild(deleteButton);
                 actionsCell.appendChild(makeAdminButton);

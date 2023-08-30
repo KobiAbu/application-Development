@@ -121,15 +121,6 @@ async function searchByParams(list) {
     aggregatePipeline.push({
       $match: groupByFields,
     });
-    // aggregatePipeline.push({
-    //   $group: {
-    //     _id: {
-    //       type: '$type',
-    //       gender: '$gender',
-    //       price: '$price',
-    //     },
-    //   },
-    // });
 
     const result = await items.aggregate(aggregatePipeline);
     return result;
@@ -173,11 +164,8 @@ const getUser = async (name, password) => {
 };
 
 const crateItem = async (productName, price, stock, picture, gender, type) => {
-  // if (await checkIfExist(id)) {
-  //   return null;
-  // }
+
   try {
-    //console.log(picture)
     const item = new items({
       productName: productName,
       price: price,

@@ -33,14 +33,12 @@ $(document).ready(async function () {
       }
     });
 
-    // Wait for all promises to resolve
     await Promise.all(promises);
     localStorage.setItem("prdList", JSON.stringify(itemList));
     document.getElementById("total").innerHTML = `Total: $${total.toFixed(2)}`;
     localStorage.setItem("total", JSON.stringify(total));
   }
 
-  // Attach event listeners to "Remove" buttons
   const removeButtons = document.querySelectorAll(".remove-btn");
   removeButtons.forEach((button) => {
     button.addEventListener("click", removeFromCartAndUpdate);
