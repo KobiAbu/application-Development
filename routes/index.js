@@ -56,7 +56,7 @@ router.delete(
   ensureAdmin,
   dataController.deleteOrder
 );
-router.post('/admin/getSpecificOrder', dataController.getSpecificOrder)
+router.post("/admin/getSpecificOrder", dataController.getSpecificOrder);
 router.delete("/admin/deleteItem/:_id", ensureAdmin, dataController.deleteData);
 router.post("/admin/update", ensureAdmin, dataController.updateData);
 router.get("/admin/update/:id", ensureAdmin, dataController.updateData);
